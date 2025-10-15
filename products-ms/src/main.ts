@@ -1,12 +1,13 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { ValidationPipe } from '@nestjs/common';
+import { Logger, ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { ApiResponseInterceptor } from './common/interceptors/api-response.interceptor';
 import { ApiExceptionFilter } from './common/filters/api-exception.filter';
 
 async function bootstrap() {
+  const logger = new Logger('Bootstrap');
   const app = await NestFactory.create(AppModule, {
     cors: true,
   });
@@ -37,7 +38,7 @@ async function bootstrap() {
   SwaggerModule.setup('api/docs', app, document);
 
   await app.listen(port, () => {
-    console.log(`Microservice "products" is running on port ${port}`);
+    logger.log(`Microservice "products" is running on port ${port}`);
   });
 }
 

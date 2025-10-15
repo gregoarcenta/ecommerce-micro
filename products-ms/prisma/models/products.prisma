@@ -1,0 +1,67 @@
+// ==========================================
+// PRODUCT
+// ==========================================
+
+model Product {
+  id          String         @id @default(uuid()) @db.Uuid
+  name        String         @unique @db.VarChar(100)
+  slug        String         @unique @db.VarChar(100)
+  description String?        @db.Text
+  price       Decimal        @default(0.00) @db.Decimal(10, 2)
+  stock       Int            @default(0)
+  type        Type
+  gender      Gender
+  sizes       Size[]
+  tags        String[]       @db.VarChar(20)
+  images      ProductImage[]
+  createdAt   DateTime       @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt   DateTime       @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  @@index([type])
+  @@index([gender])
+  @@index([slug])
+  @@map("product")
+}
+
+model ProductImage {
+  id        String  @id @default(uuid()) @db.Uuid
+  url       String  @db.VarChar(500)
+  productId String  @map("product_id") @db.Uuid
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@index([productId])
+  @@map("product_image")
+}
+
+// ==========================================
+// ENUMS
+// ==========================================
+
+enum Type {
+  SHIRTS
+  PANTS
+  HOODIES
+  HATS
+
+  @@map("type")
+}
+
+enum Gender {
+  MEN
+  WOMEN
+  KID
+  UNISEX
+
+  @@map("gender")
+}
+
+enum Size {
+  XS
+  S
+  M
+  L
+  XL
+  XXL
+
+  @@map("size")
+}

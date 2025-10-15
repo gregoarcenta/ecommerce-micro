@@ -1,11 +1,14 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
+import { PrismaService } from '../common/services/prisma.service';
 
 @Injectable()
 export class ProductsService {
+  constructor(private prisma: PrismaService) {}
+
   create(createProductDto: CreateProductDto) {
-    return 'ngjkdfsnjkn';
+    return createProductDto;
   }
 
   findAll() {
