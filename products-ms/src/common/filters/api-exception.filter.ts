@@ -1,9 +1,17 @@
-import { ArgumentsHost, Catch, ExceptionFilter, HttpException, HttpStatus, Logger, } from '@nestjs/common';
-import { ApiErrorResponse } from '../interfaces/api.responses';
+import {
+  ArgumentsHost,
+  Catch,
+  ExceptionFilter,
+  HttpException,
+  HttpStatus,
+  Logger,
+} from '@nestjs/common';
+import { ApiErrorResponse } from '../interfaces/api.response';
 
 @Catch()
 export class ApiExceptionFilter<T> implements ExceptionFilter {
   private readonly logger = new Logger(ApiExceptionFilter.name);
+  private readonly isDev = process.env.NODE_ENV === 'development';
 
   catch(exception: unknown, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
@@ -17,48 +25,37 @@ export class ApiExceptionFilter<T> implements ExceptionFilter {
 
     if (exception instanceof HttpException) {
       status = exception.getStatus();
-      const exceptionResponse = exception.getResponse();
 
-      if (typeof exceptionResponse === 'string') {
-        message = exceptionResponse;
-        error = exception.name;
-      } else if (typeof exceptionResponse === 'object') {
-        message = (exceptionResponse as any).message || message;
-        error = (exceptionResponse as any).error || exception.name;
+      const res = exception.getResponse();
+      const responseObj =
+        typeof res === 'string'
+          ? { message: res, error: exception.name }
+          : (res as Partial<ApiErrorResponse>);
 
-        if (
-          (exceptionResponse as any).message &&
-          Array.isArray((exceptionResponse as any).message)
-        ) {
-          details = (exceptionResponse as any).message;
-        }
-      }
+      error = responseObj.error ?? exception.name;
+      message = responseObj.message ?? message;
+      if (this.isDev) details = exception.stack;
     } else if (exception instanceof Error) {
-      message = exception.message;
-      error = exception.name;
-
-      // En desarrollo, incluye el stack trace
-      if (process.env.NODE_ENV === 'development') {
-        details = exception.stack;
-      }
+      error = exception.name ?? error;
+      message = exception.message ?? message;
+      details = this.isDev ? exception.stack : undefined;
     }
 
-    this.logger.error(
-      `${request.method} ${request.url} - Status: ${status} - Message: ${message}`,
-      exception instanceof Error ? exception.stack : undefined,
-    );
+    message = Array.isArray(message) ? message.join('; ') : message;
 
     const errorResponse: ApiErrorResponse = {
       statusCode: status,
-      message: Array.isArray(message) ? message.join(', ') : message,
+      message,
       error,
       timestamp: new Date().toISOString(),
       path: request.url,
+      details,
     };
 
-    if (details && process.env.NODE_ENV === 'development') {
-      errorResponse.details = details;
-    }
+    this.logger.error(
+      `[${request.method}] ${request.url} -> ${status} (${error}): ${message}`,
+      exception instanceof Error ? exception.stack : undefined,
+    );
 
     response.status(status).json(errorResponse);
   }

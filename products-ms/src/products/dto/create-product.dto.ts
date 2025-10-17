@@ -21,7 +21,7 @@ export class CreateProductDto {
   @Length(3, 100)
   @IsString()
   @Transform(({ value }) => (typeof value === 'string' ? value.trim() : value))
-  title: string;
+  name: string;
 
   @ApiPropertyOptional({
     description: 'Product description',
@@ -68,10 +68,14 @@ export class CreateProductDto {
     example: [Size.XS, Size.S],
     enum: Size,
   })
+  @IsEnum(Size, { each: true })
   @ArrayUnique()
   @ArrayNotEmpty()
   @IsArray()
-  @IsEnum(Size, { each: true })
+  @Transform(({ value }) => {
+    if (value && typeof value === 'string') return JSON.parse(value);
+    return value;
+  })
   sizes: Size[];
 
   @ApiPropertyOptional({ example: ['shirt'], description: 'Product tags' })
@@ -81,10 +85,4 @@ export class CreateProductDto {
   @IsArray()
   @IsString({ each: true })
   tags?: string[];
-
-  @ApiPropertyOptional({ example: ['img1.jpg'], description: 'Product images' })
-  @IsOptional()
-  @IsString({ each: true })
-  @IsArray()
-  images?: string[];
 }

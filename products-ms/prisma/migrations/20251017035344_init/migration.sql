@@ -7,6 +7,9 @@ CREATE TYPE "gender" AS ENUM ('MEN', 'WOMEN', 'KID', 'UNISEX');
 -- CreateEnum
 CREATE TYPE "size" AS ENUM ('XS', 'S', 'M', 'L', 'XL', 'XXL');
 
+-- CreateEnum
+CREATE TYPE "ProductStatus" AS ENUM ('ARCHIVE', 'DRAFT', 'PUBLISHED');
+
 -- CreateTable
 CREATE TABLE "product" (
     "id" UUID NOT NULL,
@@ -15,6 +18,7 @@ CREATE TABLE "product" (
     "description" TEXT,
     "price" DECIMAL(10,2) NOT NULL DEFAULT 0.00,
     "stock" INTEGER NOT NULL DEFAULT 0,
+    "status" "ProductStatus" NOT NULL DEFAULT 'DRAFT',
     "type" "type" NOT NULL,
     "gender" "gender" NOT NULL,
     "sizes" "size"[],
