@@ -1,99 +1,77 @@
-import {
-  BadRequestException,
-  ConflictException,
-  HttpException,
-  Injectable,
-  InternalServerErrorException,
-  NotFoundException,
-} from '@nestjs/common';
+import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { PrismaService } from '../common/services/prisma.service';
 import { Result } from '../common/result/result';
-import { Prisma } from 'generated/prisma';
+import { Prisma, Product } from 'generated/prisma';
+import { CloudinaryService } from '../common/services/cloudinary.service';
+import { UploadApiResponse } from 'cloudinary';
 
 type ProductWithImages = Prisma.ProductGetPayload<{
   include: { images: true };
 }>;
 
+type UploadedImages = { url: string; publicId: string }[];
+type MulterFiles = Array<Express.Multer.File>;
+
 @Injectable()
 class ProductsService {
-  constructor(private prisma: PrismaService) {}
+  private logger = new Logger(ProductsService.name);
+
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly cloudinaryService: CloudinaryService,
+  ) {}
 
   async create(
     createProductDto: CreateProductDto,
-    files: Array<Express.Multer.File>,
-  ): Promise<Result<ProductWithImages>> {
+    files: MulterFiles,
+  ): Promise<Result<Product>> {
+    let _uploadedImages: UploadedImages = [];
     try {
-      return await this.prisma.$transaction(async (tx) => {
-        // 1️⃣ Subir imágenes a Cloudinary
-        // const uploadResults = await Promise.allSettled(
-        //   files.map((file) => this.cloudinaryService.uploadImage(file)),
-        // );
+      const uploadResults = await Promise.allSettled(
+        files.map((file) => this.cloudinaryService.uploadImage(file)),
+      );
 
-        // 2️⃣ Filtrar imágenes que se subieron correctamente
-        // const uploadedImages = uploadResults
-        //   .filter(
-        //     (res): res is PromiseFulfilledResult<{ url: string }> =>
-        //       res.status === 'fulfilled',
-        //   )
-        //   .map((res) => res.value.url);
+      _uploadedImages = uploadResults
+        .filter(
+          (res): res is PromiseFulfilledResult<UploadApiResponse> =>
+            res.status === 'fulfilled',
+        )
+        .map((res) => ({
+          url: res.value.secure_url,
+          publicId: res.value.public_id,
+        }));
 
-        // 3️⃣ Validar que haya al menos una imagen subida
-        // if (uploadedImages.length === 0) {
-        //   throw new BadRequestException('Failed to upload all product images');
-        // }
-
-        // 4️⃣ Crear el producto
-
-        console.log('files: ', files);
-        const product = await tx.product.create({
-          data: {
-            ...createProductDto,
-            slug: this.toSlug(createProductDto.name),
+      const productCreated = await this.prisma.product.create({
+        data: {
+          ...createProductDto,
+          slug: this.toSlug(createProductDto.name),
+          images: {
+            create: _uploadedImages.map((image) => ({
+              url: image.url,
+              publicId: image.publicId,
+            })),
           },
-        });
-
-        // 5️⃣ Crear registros en productImage para las imágenes subidas
-        // await tx.productImage.createMany({
-        //   data: uploadedImages.map((url) => ({
-        //     url,
-        //     productId: product.id,
-        //   })),
-        // });
-
-        // 6️⃣ Retornar el producto con sus imágenes
-        const productCreated = await tx.product.findUnique({
-          where: { id: product.id },
-          include: { images: true },
-        });
-
-        if (!productCreated) {
-          return Result.err(
-            new BadRequestException('There was an error creating the product'),
-          );
-        }
-
-        return Result.ok(productCreated);
+        },
       });
-    } catch (e) {
-      return Result.err(this.handlePrismaError(e));
-    }
 
-    // return fromPromise(
-    //   this.prisma.$transaction(async (tx) => {
-    //     return tx.product.findUnique({
-    //       where: { id: "abc" }
-    //     });
-    //   }),
-    // );
+      return Result.ok({ ...productCreated, images: _uploadedImages });
+    } catch (e) {
+      console.log(files.length);
+      this.logger.debug(
+        `Error creating product | files submitted: ${files.length} | files uploaded: ${_uploadedImages.length}`,
+      );
+      await this.deleteProductImages(_uploadedImages);
+      return Result.err(e);
+    }
   }
 
   findAll() {
     return this.prisma.product.findMany();
   }
 
-  findOne(id: number) {
+  async findOne(id: number) {
     throw new NotFoundException({
       message: `Product with id ${id} not found`,
     });
@@ -107,27 +85,22 @@ class ProductsService {
     return `This action removes a #${id} product`;
   }
 
-  handlePrismaError(error: unknown): HttpException {
-    if (error instanceof Prisma.PrismaClientKnownRequestError) {
-      switch (error.code) {
-        case 'P2002': {
-          const field = (error.meta?.target as string[])?.[0] || 'field';
-          return new ConflictException(
-            `A record with this ${field} already exists`,
-          );
-        }
-        case 'P2003': {
-          return new BadRequestException(
-            `Invalid reference: ${error.meta?.field_name ?? 'unknown field'}`,
-          );
-        }
-        default:
-          return new InternalServerErrorException(
-            `Database error [${error.code}]`,
-          );
-      }
+  private async deleteProductImages(
+    _uploadedImages: UploadedImages,
+  ): Promise<void> {
+    if (_uploadedImages.length > 0) {
+      const publicIds = _uploadedImages.map((image) => image.publicId);
+      const promises = publicIds.map((publicId) =>
+        this.cloudinaryService.deleteImage(publicId),
+      );
+      const deletedResults = await Promise.allSettled(promises);
+      const imagesDeletedCount = deletedResults.filter(
+        (img) => img.status === 'fulfilled',
+      ).length;
+      this.logger.debug(
+        `Images deleted: ${imagesDeletedCount}/${_uploadedImages.length}`,
+      );
     }
-    return new InternalServerErrorException('Internal server error');
   }
 
   private toSlug(value: string) {

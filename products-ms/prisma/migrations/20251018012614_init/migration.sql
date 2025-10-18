@@ -33,6 +33,7 @@ CREATE TABLE "product" (
 CREATE TABLE "product_image" (
     "id" UUID NOT NULL,
     "url" VARCHAR(500) NOT NULL,
+    "publicId" VARCHAR(20) NOT NULL,
     "product_id" UUID NOT NULL,
 
     CONSTRAINT "product_image_pkey" PRIMARY KEY ("id")
