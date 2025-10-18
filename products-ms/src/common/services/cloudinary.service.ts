@@ -1,11 +1,10 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-
+import { Readable } from 'node:stream';
 import {
   UploadApiErrorResponse,
   UploadApiResponse,
   v2 as cloudinary,
 } from 'cloudinary';
-import toStream from 'buffer-to-stream';
 
 @Injectable()
 export class CloudinaryService {
@@ -18,7 +17,8 @@ export class CloudinaryService {
           resolve(result);
         },
       );
-      toStream(file.buffer).pipe(upload);
+
+      Readable.from(file.buffer).pipe(upload);
     });
   }
 
