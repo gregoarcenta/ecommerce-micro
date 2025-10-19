@@ -12,8 +12,6 @@ import {
 import ProductsService from './products.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
-import { Result } from '../common/result/result';
-import { Product } from 'generated/prisma';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { ApiOperation } from '@nestjs/swagger';
 
@@ -40,16 +38,13 @@ export class ProductsController {
     @Body() createProductDto: CreateProductDto,
     @UploadedFiles() files: Array<Express.Multer.File>,
   ) {
-    const result: Result<Product> = await this.productsService.create(
+    const productCreated = await this.productsService.create(
       createProductDto,
       files,
     );
-
-    if (result.isErr()) throw result.error();
-
     return {
-      data: result.unwrap(),
       message: 'Product created successfully',
+      data: productCreated,
     };
   }
 

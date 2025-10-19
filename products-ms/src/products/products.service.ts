@@ -2,16 +2,15 @@ import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { PrismaService } from '../common/services/prisma.service';
-import { Result } from '../common/result/result';
-import { Prisma, Product } from 'generated/prisma';
 import { CloudinaryService } from '../common/services/cloudinary.service';
-import { UploadApiResponse } from 'cloudinary';
 import { productsInitialData } from './data/data';
+import { Prisma } from 'generated/prisma';
+import { UploadApiResponse } from 'cloudinary';
+import { ResponseProductDto } from './dto/response-product.dto';
 
 type ProductWithImages = Prisma.ProductGetPayload<{
   include: { images: true };
 }>;
-
 type UploadedImages = { url: string; publicId: string }[];
 type MulterFiles = Array<Express.Multer.File>;
 
@@ -40,37 +39,30 @@ class ProductsService {
       this.logger.debug(
         `Seeding completed. ${productsInitialData.length} products created.`,
       );
-    } catch (e) {
-      throw e;
+    } catch (error) {
+      throw error;
     }
   }
 
   async create(
     createProductDto: CreateProductDto,
     files: MulterFiles,
-  ): Promise<Result<Product>> {
-    let _uploadedImages: UploadedImages = [];
-    try {
-      const uploadResults = await Promise.allSettled(
-        files.map((file) => this.cloudinaryService.uploadImage(file)),
+  ): Promise<ResponseProductDto> {
+    const uploadedImages = await this.insertImagesToCloudinary(files);
+
+    if (uploadedImages.length < files.length) {
+      this.logger.warn(
+        `Only ${uploadedImages.length}/${files.length} images were uploaded successfully`,
       );
+    }
 
-      _uploadedImages = uploadResults
-        .filter(
-          (res): res is PromiseFulfilledResult<UploadApiResponse> =>
-            res.status === 'fulfilled',
-        )
-        .map((res) => ({
-          url: res.value.secure_url,
-          publicId: res.value.public_id,
-        }));
-
+    try {
       const productCreated = await this.prisma.product.create({
         data: {
           ...createProductDto,
           slug: this.toSlug(createProductDto.name),
           images: {
-            create: _uploadedImages.map((image) => ({
+            create: uploadedImages.map((image) => ({
               url: image.url,
               publicId: image.publicId,
             })),
@@ -78,14 +70,18 @@ class ProductsService {
         },
       });
 
-      return Result.ok({ ...productCreated, images: _uploadedImages });
-    } catch (e) {
-      console.log(files.length);
-      this.logger.debug(
-        `Error creating product | files submitted: ${files.length} | files uploaded: ${_uploadedImages.length}`,
+      return {
+        ...productCreated,
+        price: productCreated.price.toFixed(2),
+        images: uploadedImages.map((image) => image.url),
+      };
+    } catch (error) {
+      this.logger.error(
+        `Error creating product. Rolling back ${uploadedImages.length} uploaded images`,
+        error,
       );
-      await this.deleteProductImages(_uploadedImages);
-      return Result.err(e);
+      await this.removeImagesFromCloudinary(uploadedImages);
+      throw error;
     }
   }
 
@@ -107,25 +103,53 @@ class ProductsService {
     return `This action removes a #${id} product`;
   }
 
-  private async deleteProductImages(
-    _uploadedImages: UploadedImages,
+  private async insertImagesToCloudinary(
+    images: MulterFiles,
+  ): Promise<UploadedImages> {
+    return (
+      await Promise.allSettled(
+        images.map((image) => this.cloudinaryService.uploadImage(image)),
+      )
+    )
+      .filter(
+        (res): res is PromiseFulfilledResult<UploadApiResponse> =>
+          res.status === 'fulfilled',
+      )
+      .map(({ value }) => ({
+        url: value.secure_url,
+        publicId: value.public_id,
+      }));
+  }
+
+  private async removeImagesFromCloudinary(
+    uploadedImages: UploadedImages,
   ): Promise<void> {
-    if (_uploadedImages.length > 0) {
-      const publicIds = _uploadedImages.map((image) => image.publicId);
-      const promises = publicIds.map((publicId) =>
-        this.cloudinaryService.deleteImage(publicId),
+    if (uploadedImages.length > 0) return;
+
+    const deletePromises = uploadedImages.map(({ publicId }) =>
+      this.cloudinaryService.deleteImage(publicId),
+    );
+
+    const results = await Promise.allSettled(deletePromises);
+
+    const successCount = results.filter(
+      (result) => result.status === 'fulfilled',
+    ).length;
+
+    const failedCount = results.length - successCount;
+
+    if (failedCount > 0) {
+      this.logger.warn(
+        `Failed to delete ${failedCount}/${uploadedImages.length} images from Cloudinary`,
       );
-      const deletedResults = await Promise.allSettled(promises);
-      const imagesDeletedCount = deletedResults.filter(
-        (img) => img.status === 'fulfilled',
-      ).length;
+    } else {
       this.logger.debug(
-        `Images deleted: ${imagesDeletedCount}/${_uploadedImages.length}`,
+        `Successfully deleted ${successCount} images from Cloudinary`,
       );
     }
   }
 
-  private toSlug(value: string) {
+  private toSlug(value: string): string {
     return value
       .normalize('NFD')
       .replace(/[\u0300-\u036f]/g, '')
