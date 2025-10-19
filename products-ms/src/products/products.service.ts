@@ -6,6 +6,7 @@ import { Result } from '../common/result/result';
 import { Prisma, Product } from 'generated/prisma';
 import { CloudinaryService } from '../common/services/cloudinary.service';
 import { UploadApiResponse } from 'cloudinary';
+import { productsInitialData } from './data/data';
 
 type ProductWithImages = Prisma.ProductGetPayload<{
   include: { images: true };
@@ -22,6 +23,27 @@ class ProductsService {
     private readonly prisma: PrismaService,
     private readonly cloudinaryService: CloudinaryService,
   ) {}
+
+  async seed() {
+    try {
+      await this.prisma.product.deleteMany();
+
+      for (let product of productsInitialData) {
+        await this.prisma.product.create({
+          data: {
+            ...product,
+            slug: this.toSlug(product.name),
+          },
+        });
+      }
+
+      this.logger.debug(
+        `Seeding completed. ${productsInitialData.length} products created.`,
+      );
+    } catch (e) {
+      throw e;
+    }
+  }
 
   async create(
     createProductDto: CreateProductDto,

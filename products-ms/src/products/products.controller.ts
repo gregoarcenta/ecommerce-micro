@@ -1,4 +1,14 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, UploadedFiles, UseInterceptors, } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+  UploadedFiles,
+  UseInterceptors,
+} from '@nestjs/common';
 import ProductsService from './products.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
@@ -10,6 +20,14 @@ import { ApiOperation } from '@nestjs/swagger';
 @Controller('products')
 export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
+
+  @Post('seed')
+  @ApiOperation({ summary: 'Seed initial products' })
+  async seedProducts() {
+    await this.productsService.seed();
+
+    return 'Seeding completed successfully';
+  }
 
   @ApiOperation({
     summary: 'Create a new product',
