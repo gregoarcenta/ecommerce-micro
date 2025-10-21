@@ -1,4 +1,4 @@
-import { Gender, Prisma, Size, Type } from 'generated/prisma';
+import { Gender, Prisma, Size, Type, ProductStatus } from 'generated/prisma';
 
 export const productsInitialData: Prisma.ProductCreateInput[] = [
   {
@@ -1249,4 +1249,4 @@ export const productsInitialData: Prisma.ProductCreateInput[] = [
     tags: ['shirt'],
     gender: Gender.KID,
   },
-];
+].map((p) => ({ ...p, status: ProductStatus.PUBLISHED }));

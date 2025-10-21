@@ -9,7 +9,7 @@ import { PaginateProductDto } from './dto/paginate-product.dto';
 import { Paginated } from '../common/interfaces/paginate.interface';
 import { productsInitialData } from './data/data';
 import { isUUID } from 'class-validator';
-import { Prisma } from 'generated/prisma';
+import { Prisma, ProductStatus } from 'generated/prisma';
 
 type Product = Prisma.ProductGetPayload<{ include: { images: true } }>;
 type UploadedImages = { url: string; publicId: string }[];
@@ -91,12 +91,15 @@ class ProductsService {
     const { page, limit } = paginateProductDto;
 
     const productArgs: Prisma.ProductFindManyArgs = {
+      where: { status: ProductStatus.PUBLISHED },
       skip: (page - 1) * limit,
       take: limit,
     };
 
     try {
-      const totalProducts = await this.prisma.product.count();
+      const totalProducts = await this.prisma.product.count({
+        where: productArgs.where,
+      });
       const products: Product[] = await this.prisma.product.findMany({
         ...productArgs,
         include: { images: true },
@@ -116,10 +119,12 @@ class ProductsService {
     }
   }
 
-  async findOneByIdOrSlug(term: string): Promise<ResponseProductDto> {
+  async findOne(term: string): Promise<ResponseProductDto> {
     const where: Prisma.ProductWhereUniqueInput = isUUID(term)
       ? { id: term }
       : { slug: term };
+
+    where.status = ProductStatus.PUBLISHED;
 
     try {
       const product: Product = await this.prisma.product.findUniqueOrThrow({

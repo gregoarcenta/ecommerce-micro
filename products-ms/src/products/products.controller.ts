@@ -63,7 +63,7 @@ export class ProductsController {
 
   @Get(':id')
   findOne(@Param('id') id: string): Promise<Payload<ResponseProductDto>> {
-    return this.productsService.findOneByIdOrSlug(id);
+    return this.productsService.findOne(id);
   }
 
   @Patch(':id')
