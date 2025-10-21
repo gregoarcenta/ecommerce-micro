@@ -53,6 +53,7 @@ export class ApiExceptionFilter implements ExceptionFilter {
     exception: Prisma.PrismaClientKnownRequestError,
   ): ErrorContext {
     const { meta, code } = exception;
+    this.logger.debug(`[ERROR] CODE: ${code} -> ${JSON.stringify(meta)}`);
 
     switch (code) {
       case 'P2000': {
@@ -109,9 +110,7 @@ export class ApiExceptionFilter implements ExceptionFilter {
       }
 
       case 'P2025': {
-        const cause = (meta?.cause as string) ?? '';
-        const modelMatch = cause.match(/No '(\w+)' record/);
-        const modelName = modelMatch?.[1] ?? 'Record';
+        const modelName = (meta?.modelName as string) ?? 'Record';
 
         return {
           statusCode: HttpStatus.NOT_FOUND,
