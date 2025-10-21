@@ -138,12 +138,19 @@ class ProductsService {
     }
   }
 
-  update(id: number, updateProductDto: UpdateProductDto) {
+  update(id: string, updateProductDto: UpdateProductDto) {
     return `This action updates a #${id} product`;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} product`;
+  async remove(id: string): Promise<Product> {
+    try {
+      return await this.prisma.product.delete({
+        where: { id },
+        include: { images: true },
+      });
+    } catch (error) {
+      throw error;
+    }
   }
 
   private async insertImagesToCloudinary(
