@@ -138,8 +138,19 @@ class ProductsService {
     }
   }
 
-  update(id: string, updateProductDto: UpdateProductDto) {
-    return `This action updates a #${id} product`;
+  async update(id: string, updateProductDto: UpdateProductDto) {
+    try {
+      //todo: update images
+      //todo: update slug if name changes
+      const product: Product = await this.prisma.product.update({
+        where: { id },
+        data: updateProductDto,
+        include: { images: true },
+      });
+      return this.buildProductResponse(product);
+    } catch (error) {
+      throw error;
+    }
   }
 
   async remove(id: string): Promise<Product> {

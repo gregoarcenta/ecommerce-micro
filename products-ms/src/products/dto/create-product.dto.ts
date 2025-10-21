@@ -84,5 +84,9 @@ export class CreateProductDto {
   @ArrayNotEmpty()
   @IsArray()
   @IsString({ each: true })
+  @Transform(({ value }) => {
+    if (value && typeof value === 'string') return JSON.parse(value);
+    return value;
+  })
   tags?: string[];
 }
