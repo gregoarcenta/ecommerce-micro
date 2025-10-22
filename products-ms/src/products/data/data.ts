@@ -1,4 +1,4 @@
-import { Gender, Prisma, Size, Type, ProductStatus } from 'generated/prisma';
+import { Gender, Prisma, ProductStatus, Size, Type } from 'generated/prisma';
 
 export const productsInitialData: Prisma.ProductCreateInput[] = [
   {
@@ -9,11 +9,11 @@ export const productsInitialData: Prisma.ProductCreateInput[] = [
       create: [
         {
           url: 'https://res.cloudinary.com/dksluyb9v/image/upload/v1760821924/ecommerce/products/ql5rsw3bnebyjp8sun3r.webp',
-          publicId: 'ql5rsw3bnebyjp8sun3r',
+          publicId: 'ecommerce/products/ql5rsw3bnebyjp8sun3r',
         },
         {
           url: 'https://res.cloudinary.com/dksluyb9v/image/upload/v1760821924/ecommerce/products/evjw10lt3xnszvo2ar4z.webp',
-          publicId: 'evjw10lt3xnszvo2ar4z',
+          publicId: 'ecommerce/products/evjw10lt3xnszvo2ar4z',
         },
       ],
     },
@@ -24,6 +24,7 @@ export const productsInitialData: Prisma.ProductCreateInput[] = [
     type: Type.SHIRTS,
     tags: ['sweatshirt'],
     gender: Gender.MEN,
+    status: ProductStatus.PUBLISHED,
   },
   {
     name: "Men's Quilted Shirt Jacket",
@@ -33,11 +34,11 @@ export const productsInitialData: Prisma.ProductCreateInput[] = [
       create: [
         {
           url: 'https://res.cloudinary.com/dksluyb9v/image/upload/v1760821924/ecommerce/products/xcw7s3w9fmai1anrcdwf.jpg',
-          publicId: 'xcw7s3w9fmai1anrcdwf',
+          publicId: 'ecommerce/products/xcw7s3w9fmai1anrcdwf',
         },
         {
           url: 'https://res.cloudinary.com/dksluyb9v/image/upload/v1760821924/ecommerce/products/ii0ye9u0elcuohv6lhuq.jpg',
-          publicId: 'ii0ye9u0elcuohv6lhuq',
+          publicId: 'ecommerce/products/ii0ye9u0elcuohv6lhuq',
         },
       ],
     },
@@ -48,6 +49,7 @@ export const productsInitialData: Prisma.ProductCreateInput[] = [
     type: Type.SHIRTS,
     tags: ['jacket'],
     gender: Gender.MEN,
+    status: ProductStatus.PUBLISHED,
   },
   {
     name: "Men's Raven Lightweight Zip Up Bomber Jacket",
@@ -57,11 +59,11 @@ export const productsInitialData: Prisma.ProductCreateInput[] = [
       create: [
         {
           url: 'https://res.cloudinary.com/dksluyb9v/image/upload/v1760821924/ecommerce/products/slgkaokfwhclfm1nkgqb.jpg',
-          publicId: 'slgkaokfwhclfm1nkgqb',
+          publicId: 'ecommerce/products/slgkaokfwhclfm1nkgqb',
         },
         {
           url: 'https://res.cloudinary.com/dksluyb9v/image/upload/v1760821924/ecommerce/products/cfzyv2ych227ylyeik55.jpg',
-          publicId: 'cfzyv2ych227ylyeik55',
+          publicId: 'ecommerce/products/cfzyv2ych227ylyeik55',
         },
       ],
     },
@@ -72,6 +74,7 @@ export const productsInitialData: Prisma.ProductCreateInput[] = [
     type: Type.SHIRTS,
     tags: ['shirt'],
     gender: Gender.MEN,
+    status: ProductStatus.PUBLISHED,
   },
   {
     name: "Men's Turbine Long Sleeve Tee",
@@ -81,11 +84,11 @@ export const productsInitialData: Prisma.ProductCreateInput[] = [
       create: [
         {
           url: 'https://res.cloudinary.com/dksluyb9v/image/upload/v1760821924/ecommerce/products/g4vtixxu4a0slzokntjm.jpg',
-          publicId: 'g4vtixxu4a0slzokntjm',
+          publicId: 'ecommerce/products/g4vtixxu4a0slzokntjm',
         },
         {
           url: 'https://res.cloudinary.com/dksluyb9v/image/upload/v1760821924/ecommerce/products/ls6tpmiwzmzqf5rbp0wp.jpg',
-          publicId: 'ls6tpmiwzmzqf5rbp0wp',
+          publicId: 'ecommerce/products/ls6tpmiwzmzqf5rbp0wp',
         },
       ],
     },
@@ -96,6 +99,7 @@ export const productsInitialData: Prisma.ProductCreateInput[] = [
     type: Type.SHIRTS,
     tags: ['shirt'],
     gender: Gender.MEN,
+    status: ProductStatus.PUBLISHED,
   },
   {
     name: "Men's Turbine Short Sleeve Tee",
@@ -105,11 +109,11 @@ export const productsInitialData: Prisma.ProductCreateInput[] = [
       create: [
         {
           url: 'https://res.cloudinary.com/dksluyb9v/image/upload/v1760821924/ecommerce/products/s6xa6iiwa7pew6rpymbq.jpg',
-          publicId: 's6xa6iiwa7pew6rpymbq',
+          publicId: 'ecommerce/products/s6xa6iiwa7pew6rpymbq',
         },
         {
           url: 'https://res.cloudinary.com/dksluyb9v/image/upload/v1760821924/ecommerce/products/rbdytanmlswsynecpqbh.jpg',
-          publicId: 'rbdytanmlswsynecpqbh',
+          publicId: 'ecommerce/products/rbdytanmlswsynecpqbh',
         },
       ],
     },
@@ -120,6 +124,7 @@ export const productsInitialData: Prisma.ProductCreateInput[] = [
     type: Type.SHIRTS,
     tags: ['shirt'],
     gender: Gender.MEN,
+    status: ProductStatus.PUBLISHED,
   },
   {
     name: "Men's Cybertruck Owl Tee",
@@ -129,11 +134,11 @@ export const productsInitialData: Prisma.ProductCreateInput[] = [
       create: [
         {
           url: 'https://res.cloudinary.com/dksluyb9v/image/upload/v1760821924/ecommerce/products/jhrgh2z0wuscq5g9ibrn.jpg',
-          publicId: 'jhrgh2z0wuscq5g9ibrn',
+          publicId: 'ecommerce/products/jhrgh2z0wuscq5g9ibrn',
         },
         {
           url: 'https://res.cloudinary.com/dksluyb9v/image/upload/v1760821924/ecommerce/products/nbfzdsk4irzqhnwws4ax.jpg',
-          publicId: 'nbfzdsk4irzqhnwws4ax',
+          publicId: 'ecommerce/products/nbfzdsk4irzqhnwws4ax',
         },
       ],
     },
@@ -144,6 +149,7 @@ export const productsInitialData: Prisma.ProductCreateInput[] = [
     type: Type.SHIRTS,
     tags: ['shirt'],
     gender: Gender.MEN,
+    status: ProductStatus.PUBLISHED,
   },
   {
     name: "Men's Solar Roof Tee",
@@ -153,11 +159,11 @@ export const productsInitialData: Prisma.ProductCreateInput[] = [
       create: [
         {
           url: 'https://res.cloudinary.com/dksluyb9v/image/upload/v1760821924/ecommerce/products/stpdx61ys7qjlzvx2ivr.jpg',
-          publicId: 'stpdx61ys7qjlzvx2ivr',
+          publicId: 'ecommerce/products/stpdx61ys7qjlzvx2ivr',
         },
         {
           url: 'https://res.cloudinary.com/dksluyb9v/image/upload/v1760821924/ecommerce/products/m5hj69o9phnr8i4gtiiy.jpg',
-          publicId: 'm5hj69o9phnr8i4gtiiy',
+          publicId: 'ecommerce/products/m5hj69o9phnr8i4gtiiy',
         },
       ],
     },
@@ -168,6 +174,7 @@ export const productsInitialData: Prisma.ProductCreateInput[] = [
     type: Type.SHIRTS,
     tags: ['shirt'],
     gender: Gender.MEN,
+    status: ProductStatus.PUBLISHED,
   },
   {
     name: "Men's Let the Sun Shine Tee",
@@ -177,11 +184,11 @@ export const productsInitialData: Prisma.ProductCreateInput[] = [
       create: [
         {
           url: 'https://res.cloudinary.com/dksluyb9v/image/upload/v1760821924/ecommerce/products/edmxaxsgj5zdtydh650i.jpg',
-          publicId: 'edmxaxsgj5zdtydh650i',
+          publicId: 'ecommerce/products/edmxaxsgj5zdtydh650i',
         },
         {
           url: 'https://res.cloudinary.com/dksluyb9v/image/upload/v1760821924/ecommerce/products/sqq02mlvi0rtktntujtp.jpg',
-          publicId: 'sqq02mlvi0rtktntujtp',
+          publicId: 'ecommerce/products/sqq02mlvi0rtktntujtp',
         },
       ],
     },
@@ -192,6 +199,7 @@ export const productsInitialData: Prisma.ProductCreateInput[] = [
     type: Type.SHIRTS,
     tags: ['shirt'],
     gender: Gender.MEN,
+    status: ProductStatus.PUBLISHED,
   },
   {
     name: "Men's 3D Large Wordmark Tee",
@@ -201,11 +209,11 @@ export const productsInitialData: Prisma.ProductCreateInput[] = [
       create: [
         {
           url: 'https://res.cloudinary.com/dksluyb9v/image/upload/v1760821924/ecommerce/products/qrbbmrd7dohnghmlpys9.jpg',
-          publicId: 'qrbbmrd7dohnghmlpys9',
+          publicId: 'ecommerce/products/qrbbmrd7dohnghmlpys9',
         },
         {
           url: 'https://res.cloudinary.com/dksluyb9v/image/upload/v1760821924/ecommerce/products/dtbrf04unj3jqn0tbpqc.jpg',
-          publicId: 'dtbrf04unj3jqn0tbpqc',
+          publicId: 'ecommerce/products/dtbrf04unj3jqn0tbpqc',
         },
       ],
     },
@@ -216,6 +224,7 @@ export const productsInitialData: Prisma.ProductCreateInput[] = [
     type: Type.SHIRTS,
     tags: ['shirt'],
     gender: Gender.MEN,
+    status: ProductStatus.PUBLISHED,
   },
   {
     name: "Men's 3D T Logo Tee",
@@ -225,11 +234,11 @@ export const productsInitialData: Prisma.ProductCreateInput[] = [
       create: [
         {
           url: 'https://res.cloudinary.com/dksluyb9v/image/upload/v1760821924/ecommerce/products/xuusu8rydjbjccajc0pj.jpg',
-          publicId: 'xuusu8rydjbjccajc0pj',
+          publicId: 'ecommerce/products/xuusu8rydjbjccajc0pj',
         },
         {
           url: 'https://res.cloudinary.com/dksluyb9v/image/upload/v1760821924/ecommerce/products/jimzm0a4ov6f06mvwgoa.jpg',
-          publicId: 'jimzm0a4ov6f06mvwgoa',
+          publicId: 'ecommerce/products/jimzm0a4ov6f06mvwgoa',
         },
       ],
     },
@@ -240,6 +249,7 @@ export const productsInitialData: Prisma.ProductCreateInput[] = [
     type: Type.SHIRTS,
     tags: ['shirt'],
     gender: Gender.MEN,
+    status: ProductStatus.PUBLISHED,
   },
   {
     name: "Men's 3D Small Wordmark Tee",
@@ -249,11 +259,11 @@ export const productsInitialData: Prisma.ProductCreateInput[] = [
       create: [
         {
           url: 'https://res.cloudinary.com/dksluyb9v/image/upload/v1760821924/ecommerce/products/kptuuxqwxke7j1am7ye4.jpg',
-          publicId: 'kptuuxqwxke7j1am7ye4',
+          publicId: 'ecommerce/products/kptuuxqwxke7j1am7ye4',
         },
         {
           url: 'https://res.cloudinary.com/dksluyb9v/image/upload/v1760821924/ecommerce/products/tuolt6bu4kxnqjoxdty7.jpg',
-          publicId: 'tuolt6bu4kxnqjoxdty7',
+          publicId: 'ecommerce/products/tuolt6bu4kxnqjoxdty7',
         },
       ],
     },
@@ -264,6 +274,7 @@ export const productsInitialData: Prisma.ProductCreateInput[] = [
     type: Type.SHIRTS,
     tags: ['shirt'],
     gender: Gender.MEN,
+    status: ProductStatus.PUBLISHED,
   },
   {
     name: "Men's Plaid Mode Tee",
@@ -273,11 +284,11 @@ export const productsInitialData: Prisma.ProductCreateInput[] = [
       create: [
         {
           url: 'https://res.cloudinary.com/dksluyb9v/image/upload/v1760821924/ecommerce/products/caymuimfu8u7a9scettm.jpg',
-          publicId: 'caymuimfu8u7a9scettm',
+          publicId: 'ecommerce/products/caymuimfu8u7a9scettm',
         },
         {
           url: 'https://res.cloudinary.com/dksluyb9v/image/upload/v1760821924/ecommerce/products/x6wlbxzkbu1dgviesnta.jpg',
-          publicId: 'x6wlbxzkbu1dgviesnta',
+          publicId: 'ecommerce/products/x6wlbxzkbu1dgviesnta',
         },
       ],
     },
@@ -288,6 +299,7 @@ export const productsInitialData: Prisma.ProductCreateInput[] = [
     type: Type.SHIRTS,
     tags: ['shirt'],
     gender: Gender.MEN,
+    status: ProductStatus.PUBLISHED,
   },
   {
     name: "Men's Powerwall Tee",
@@ -297,11 +309,11 @@ export const productsInitialData: Prisma.ProductCreateInput[] = [
       create: [
         {
           url: 'https://res.cloudinary.com/dksluyb9v/image/upload/v1760821924/ecommerce/products/m08irb9crjfvpzeajcj6.jpg',
-          publicId: 'm08irb9crjfvpzeajcj6',
+          publicId: 'ecommerce/products/m08irb9crjfvpzeajcj6',
         },
         {
           url: 'https://res.cloudinary.com/dksluyb9v/image/upload/v1760821924/ecommerce/products/sgnnqirw3gdof1l9vri8.jpg',
-          publicId: 'sgnnqirw3gdof1l9vri8',
+          publicId: 'ecommerce/products/sgnnqirw3gdof1l9vri8',
         },
       ],
     },
@@ -312,6 +324,7 @@ export const productsInitialData: Prisma.ProductCreateInput[] = [
     type: Type.SHIRTS,
     tags: ['shirt'],
     gender: Gender.MEN,
+    status: ProductStatus.PUBLISHED,
   },
   {
     name: "Men's Battery Day Tee",
@@ -321,11 +334,11 @@ export const productsInitialData: Prisma.ProductCreateInput[] = [
       create: [
         {
           url: 'https://res.cloudinary.com/dksluyb9v/image/upload/v1760821924/ecommerce/products/iwilapbk8iipfrjvcpe6.jpg',
-          publicId: 'iwilapbk8iipfrjvcpe6',
+          publicId: 'ecommerce/products/iwilapbk8iipfrjvcpe6',
         },
         {
           url: 'https://res.cloudinary.com/dksluyb9v/image/upload/v1760821924/ecommerce/products/h3diqni3hku0zly0crzc.jpg',
-          publicId: 'h3diqni3hku0zly0crzc',
+          publicId: 'ecommerce/products/h3diqni3hku0zly0crzc',
         },
       ],
     },
@@ -336,6 +349,7 @@ export const productsInitialData: Prisma.ProductCreateInput[] = [
     type: Type.SHIRTS,
     tags: ['shirt'],
     gender: Gender.MEN,
+    status: ProductStatus.PUBLISHED,
   },
   {
     name: "Men's Cybertruck Bulletproof Tee",
@@ -345,11 +359,11 @@ export const productsInitialData: Prisma.ProductCreateInput[] = [
       create: [
         {
           url: 'https://res.cloudinary.com/dksluyb9v/image/upload/v1760821924/ecommerce/products/k5hrpenr5sk0v3lk6p5s.jpg',
-          publicId: 'k5hrpenr5sk0v3lk6p5s',
+          publicId: 'ecommerce/products/k5hrpenr5sk0v3lk6p5s',
         },
         {
           url: 'https://res.cloudinary.com/dksluyb9v/image/upload/v1760821924/ecommerce/products/sygfeaheuyfjfznglryy.jpg',
-          publicId: 'sygfeaheuyfjfznglryy',
+          publicId: 'ecommerce/products/sygfeaheuyfjfznglryy',
         },
       ],
     },
@@ -360,6 +374,7 @@ export const productsInitialData: Prisma.ProductCreateInput[] = [
     type: Type.SHIRTS,
     tags: ['shirt'],
     gender: Gender.MEN,
+    status: ProductStatus.PUBLISHED,
   },
   {
     name: "Men's Haha Yes Tee",
@@ -369,11 +384,11 @@ export const productsInitialData: Prisma.ProductCreateInput[] = [
       create: [
         {
           url: 'https://res.cloudinary.com/dksluyb9v/image/upload/v1760821924/ecommerce/products/pp7chx6hp1aftccuzfrk.jpg',
-          publicId: 'pp7chx6hp1aftccuzfrk',
+          publicId: 'ecommerce/products/pp7chx6hp1aftccuzfrk',
         },
         {
           url: 'https://res.cloudinary.com/dksluyb9v/image/upload/v1760821924/ecommerce/products/wvrtie9fowo2ziempmy4.jpg',
-          publicId: 'wvrtie9fowo2ziempmy4',
+          publicId: 'ecommerce/products/wvrtie9fowo2ziempmy4',
         },
       ],
     },
@@ -384,6 +399,7 @@ export const productsInitialData: Prisma.ProductCreateInput[] = [
     type: Type.SHIRTS,
     tags: ['shirt'],
     gender: Gender.MEN,
+    status: ProductStatus.PUBLISHED,
   },
   {
     name: "Men's S3XY Tee",
@@ -393,11 +409,11 @@ export const productsInitialData: Prisma.ProductCreateInput[] = [
       create: [
         {
           url: 'https://res.cloudinary.com/dksluyb9v/image/upload/v1760821924/ecommerce/products/l2rircfupcndjx4jnr6r.jpg',
-          publicId: 'l2rircfupcndjx4jnr6r',
+          publicId: 'ecommerce/products/l2rircfupcndjx4jnr6r',
         },
         {
           url: 'https://res.cloudinary.com/dksluyb9v/image/upload/v1760821924/ecommerce/products/vfs1zego7i9s8n96x1cw.jpg',
-          publicId: 'vfs1zego7i9s8n96x1cw',
+          publicId: 'ecommerce/products/vfs1zego7i9s8n96x1cw',
         },
       ],
     },
@@ -408,6 +424,7 @@ export const productsInitialData: Prisma.ProductCreateInput[] = [
     type: Type.SHIRTS,
     tags: ['shirt'],
     gender: Gender.MEN,
+    status: ProductStatus.PUBLISHED,
   },
   {
     name: "Men's 3D Wordmark Long Sleeve Tee",
@@ -417,11 +434,11 @@ export const productsInitialData: Prisma.ProductCreateInput[] = [
       create: [
         {
           url: 'https://res.cloudinary.com/dksluyb9v/image/upload/v1760821924/ecommerce/products/ngblxebozstd6x3rrrci.jpg',
-          publicId: 'ngblxebozstd6x3rrrci',
+          publicId: 'ecommerce/products/ngblxebozstd6x3rrrci',
         },
         {
           url: 'https://res.cloudinary.com/dksluyb9v/image/upload/v1760821924/ecommerce/products/xceinpdzirjishdr2evi.jpg',
-          publicId: 'xceinpdzirjishdr2evi',
+          publicId: 'ecommerce/products/xceinpdzirjishdr2evi',
         },
       ],
     },
@@ -432,6 +449,7 @@ export const productsInitialData: Prisma.ProductCreateInput[] = [
     type: Type.SHIRTS,
     tags: ['shirt'],
     gender: Gender.MEN,
+    status: ProductStatus.PUBLISHED,
   },
   {
     name: "Men's 3D T Logo Long Sleeve Tee",
@@ -441,11 +459,11 @@ export const productsInitialData: Prisma.ProductCreateInput[] = [
       create: [
         {
           url: 'https://res.cloudinary.com/dksluyb9v/image/upload/v1760821924/ecommerce/products/eurlhawpyotakmhe6vyt.jpg',
-          publicId: 'eurlhawpyotakmhe6vyt',
+          publicId: 'ecommerce/products/eurlhawpyotakmhe6vyt',
         },
         {
           url: 'https://res.cloudinary.com/dksluyb9v/image/upload/v1760821924/ecommerce/products/xhltheyelq8ccuifllnj.jpg',
-          publicId: 'xhltheyelq8ccuifllnj',
+          publicId: 'ecommerce/products/xhltheyelq8ccuifllnj',
         },
       ],
     },
@@ -456,6 +474,7 @@ export const productsInitialData: Prisma.ProductCreateInput[] = [
     type: Type.SHIRTS,
     tags: ['shirt'],
     gender: Gender.MEN,
+    status: ProductStatus.PUBLISHED,
   },
   {
     name: "Men's Raven Lightweight Hoodie",
@@ -465,11 +484,11 @@ export const productsInitialData: Prisma.ProductCreateInput[] = [
       create: [
         {
           url: 'https://res.cloudinary.com/dksluyb9v/image/upload/v1760821924/ecommerce/products/juu2qbdiafjwdd4epdv0.jpg',
-          publicId: 'juu2qbdiafjwdd4epdv0',
+          publicId: 'ecommerce/products/juu2qbdiafjwdd4epdv0',
         },
         {
           url: 'https://res.cloudinary.com/dksluyb9v/image/upload/v1760821924/ecommerce/products/eeqzsttdagmnxjq4kz4g.jpg',
-          publicId: 'eeqzsttdagmnxjq4kz4g',
+          publicId: 'ecommerce/products/eeqzsttdagmnxjq4kz4g',
         },
       ],
     },
@@ -480,6 +499,7 @@ export const productsInitialData: Prisma.ProductCreateInput[] = [
     type: Type.HOODIES,
     tags: ['hoodie'],
     gender: Gender.MEN,
+    status: ProductStatus.PUBLISHED,
   },
   {
     name: 'Chill Pullover Hoodie',
@@ -489,11 +509,11 @@ export const productsInitialData: Prisma.ProductCreateInput[] = [
       create: [
         {
           url: 'https://res.cloudinary.com/dksluyb9v/image/upload/v1760821924/ecommerce/products/yccsuzprxfkbqf6wz4jy.jpg',
-          publicId: 'yccsuzprxfkbqf6wz4jy',
+          publicId: 'ecommerce/products/yccsuzprxfkbqf6wz4jy',
         },
         {
           url: 'https://res.cloudinary.com/dksluyb9v/image/upload/v1760821924/ecommerce/products/ao951n6zu1za8a8rbtdk.jpg',
-          publicId: 'ao951n6zu1za8a8rbtdk',
+          publicId: 'ecommerce/products/ao951n6zu1za8a8rbtdk',
         },
       ],
     },
@@ -504,6 +524,7 @@ export const productsInitialData: Prisma.ProductCreateInput[] = [
     type: Type.HOODIES,
     tags: ['hoodie'],
     gender: Gender.UNISEX,
+    status: ProductStatus.PUBLISHED,
   },
   {
     name: "Men's Chill Full Zip Hoodie",
@@ -513,11 +534,11 @@ export const productsInitialData: Prisma.ProductCreateInput[] = [
       create: [
         {
           url: 'https://res.cloudinary.com/dksluyb9v/image/upload/v1760821924/ecommerce/products/ekwirnmvdg2egqvlwldx.jpg',
-          publicId: 'ekwirnmvdg2egqvlwldx',
+          publicId: 'ecommerce/products/ekwirnmvdg2egqvlwldx',
         },
         {
           url: 'https://res.cloudinary.com/dksluyb9v/image/upload/v1760821924/ecommerce/products/lyvnitudfzcxqakbzods.jpg',
-          publicId: 'lyvnitudfzcxqakbzods',
+          publicId: 'ecommerce/products/lyvnitudfzcxqakbzods',
         },
       ],
     },
@@ -528,6 +549,7 @@ export const productsInitialData: Prisma.ProductCreateInput[] = [
     type: Type.SHIRTS,
     tags: ['shirt'],
     gender: Gender.MEN,
+    status: ProductStatus.PUBLISHED,
   },
   {
     name: "Men's Chill Quarter Zip Pullover - Gray",
@@ -537,11 +559,11 @@ export const productsInitialData: Prisma.ProductCreateInput[] = [
       create: [
         {
           url: 'https://res.cloudinary.com/dksluyb9v/image/upload/v1760821924/ecommerce/products/tcqevtdme1enh7akfuao.jpg',
-          publicId: 'tcqevtdme1enh7akfuao',
+          publicId: 'ecommerce/products/tcqevtdme1enh7akfuao',
         },
         {
           url: 'https://res.cloudinary.com/dksluyb9v/image/upload/v1760821924/ecommerce/products/ryieaxo7i9ub7sfkfa6y.jpg',
-          publicId: 'ryieaxo7i9ub7sfkfa6y',
+          publicId: 'ecommerce/products/ryieaxo7i9ub7sfkfa6y',
         },
       ],
     },
@@ -552,6 +574,7 @@ export const productsInitialData: Prisma.ProductCreateInput[] = [
     type: Type.SHIRTS,
     tags: ['shirt'],
     gender: Gender.MEN,
+    status: ProductStatus.PUBLISHED,
   },
   {
     name: "Men's Chill Quarter Zip Pullover - White",
@@ -561,11 +584,11 @@ export const productsInitialData: Prisma.ProductCreateInput[] = [
       create: [
         {
           url: 'https://res.cloudinary.com/dksluyb9v/image/upload/v1760821924/ecommerce/products/mhjn5tmbcvexhervvfiy.jpg',
-          publicId: 'mhjn5tmbcvexhervvfiy',
+          publicId: 'ecommerce/products/mhjn5tmbcvexhervvfiy',
         },
         {
           url: 'https://res.cloudinary.com/dksluyb9v/image/upload/v1760821924/ecommerce/products/liwlagit1kklewbpwelf.jpg',
-          publicId: 'liwlagit1kklewbpwelf',
+          publicId: 'ecommerce/products/liwlagit1kklewbpwelf',
         },
       ],
     },
@@ -576,6 +599,7 @@ export const productsInitialData: Prisma.ProductCreateInput[] = [
     type: Type.SHIRTS,
     tags: ['shirt'],
     gender: Gender.MEN,
+    status: ProductStatus.PUBLISHED,
   },
   {
     name: '3D Large Wordmark Pullover Hoodie',
@@ -585,11 +609,11 @@ export const productsInitialData: Prisma.ProductCreateInput[] = [
       create: [
         {
           url: 'https://res.cloudinary.com/dksluyb9v/image/upload/v1760821924/ecommerce/products/hmq1bj9k6h2opay10yxg.jpg',
-          publicId: 'hmq1bj9k6h2opay10yxg',
+          publicId: 'ecommerce/products/hmq1bj9k6h2opay10yxg',
         },
         {
           url: 'https://res.cloudinary.com/dksluyb9v/image/upload/v1760821924/ecommerce/products/rjcjeffn0jc247dfbdre.jpg',
-          publicId: 'rjcjeffn0jc247dfbdre',
+          publicId: 'ecommerce/products/rjcjeffn0jc247dfbdre',
         },
       ],
     },
@@ -600,6 +624,7 @@ export const productsInitialData: Prisma.ProductCreateInput[] = [
     type: Type.HOODIES,
     tags: ['hoodie'],
     gender: Gender.UNISEX,
+    status: ProductStatus.PUBLISHED,
   },
   {
     name: 'Cybertruck Graffiti Hoodie',
@@ -609,11 +634,11 @@ export const productsInitialData: Prisma.ProductCreateInput[] = [
       create: [
         {
           url: 'https://res.cloudinary.com/dksluyb9v/image/upload/v1760821924/ecommerce/products/ormhegiv58arvfdivuc4.jpg',
-          publicId: 'ormhegiv58arvfdivuc4',
+          publicId: 'ecommerce/products/ormhegiv58arvfdivuc4',
         },
         {
           url: 'https://res.cloudinary.com/dksluyb9v/image/upload/v1760821924/ecommerce/products/uvkwrwbmppitarmcw3rh.jpg',
-          publicId: 'uvkwrwbmppitarmcw3rh',
+          publicId: 'ecommerce/products/uvkwrwbmppitarmcw3rh',
         },
       ],
     },
@@ -624,6 +649,7 @@ export const productsInitialData: Prisma.ProductCreateInput[] = [
     type: Type.HOODIES,
     tags: ['hoodie'],
     gender: Gender.UNISEX,
+    status: ProductStatus.PUBLISHED,
   },
   {
     name: 'Relaxed T Logo Hat',
@@ -633,11 +659,11 @@ export const productsInitialData: Prisma.ProductCreateInput[] = [
       create: [
         {
           url: 'https://res.cloudinary.com/dksluyb9v/image/upload/v1760821924/ecommerce/products/tauzsezzrzpero8mwwqs.jpg',
-          publicId: 'tauzsezzrzpero8mwwqs',
+          publicId: 'ecommerce/products/tauzsezzrzpero8mwwqs',
         },
         {
           url: 'https://res.cloudinary.com/dksluyb9v/image/upload/v1760821924/ecommerce/products/ce01qilnaedkx5xebxu2.jpg',
-          publicId: 'ce01qilnaedkx5xebxu2',
+          publicId: 'ecommerce/products/ce01qilnaedkx5xebxu2',
         },
       ],
     },
@@ -648,6 +674,7 @@ export const productsInitialData: Prisma.ProductCreateInput[] = [
     type: Type.HATS,
     tags: ['hats'],
     gender: Gender.UNISEX,
+    status: ProductStatus.PUBLISHED,
   },
   {
     name: 'Thermal Cuffed Beanie',
@@ -657,11 +684,11 @@ export const productsInitialData: Prisma.ProductCreateInput[] = [
       create: [
         {
           url: 'https://res.cloudinary.com/dksluyb9v/image/upload/v1760821924/ecommerce/products/xjsfsi4dmrnulzhmpdck.jpg',
-          publicId: 'xjsfsi4dmrnulzhmpdck',
+          publicId: 'ecommerce/products/xjsfsi4dmrnulzhmpdck',
         },
         {
           url: 'https://res.cloudinary.com/dksluyb9v/image/upload/v1760821924/ecommerce/products/dtizift2tvhwsc1ib5g0.jpg',
-          publicId: 'dtizift2tvhwsc1ib5g0',
+          publicId: 'ecommerce/products/dtizift2tvhwsc1ib5g0',
         },
       ],
     },
@@ -672,6 +699,7 @@ export const productsInitialData: Prisma.ProductCreateInput[] = [
     type: Type.HATS,
     tags: ['hats'],
     gender: Gender.UNISEX,
+    status: ProductStatus.PUBLISHED,
   },
   {
     name: "Women's Cropped Puffer Jacket",
@@ -681,11 +709,11 @@ export const productsInitialData: Prisma.ProductCreateInput[] = [
       create: [
         {
           url: 'https://res.cloudinary.com/dksluyb9v/image/upload/v1760821924/ecommerce/products/majbtc3jg6lp1s7fizlr.jpg',
-          publicId: 'majbtc3jg6lp1s7fizlr',
+          publicId: 'ecommerce/products/majbtc3jg6lp1s7fizlr',
         },
         {
           url: 'https://res.cloudinary.com/dksluyb9v/image/upload/v1760821924/ecommerce/products/fomvyjwrhjetrxbtmwxg.jpg',
-          publicId: 'fomvyjwrhjetrxbtmwxg',
+          publicId: 'ecommerce/products/fomvyjwrhjetrxbtmwxg',
         },
       ],
     },
@@ -696,6 +724,7 @@ export const productsInitialData: Prisma.ProductCreateInput[] = [
     type: Type.HOODIES,
     tags: ['hoodie'],
     gender: Gender.WOMEN,
+    status: ProductStatus.PUBLISHED,
   },
   {
     name: "Women's Chill Half Zip Cropped Hoodie",
@@ -705,11 +734,11 @@ export const productsInitialData: Prisma.ProductCreateInput[] = [
       create: [
         {
           url: 'https://res.cloudinary.com/dksluyb9v/image/upload/v1760821924/ecommerce/products/g7ticy6g6daltmhypjsq.jpg',
-          publicId: 'g7ticy6g6daltmhypjsq',
+          publicId: 'ecommerce/products/g7ticy6g6daltmhypjsq',
         },
         {
           url: 'https://res.cloudinary.com/dksluyb9v/image/upload/v1760821924/ecommerce/products/yfihavvuwhf4ukpltrdt.jpg',
-          publicId: 'yfihavvuwhf4ukpltrdt',
+          publicId: 'ecommerce/products/yfihavvuwhf4ukpltrdt',
         },
       ],
     },
@@ -720,6 +749,7 @@ export const productsInitialData: Prisma.ProductCreateInput[] = [
     type: Type.HOODIES,
     tags: ['hoodie'],
     gender: Gender.WOMEN,
+    status: ProductStatus.PUBLISHED,
   },
   {
     name: "Women's Raven Slouchy Crew Sweatshirt",
@@ -729,11 +759,11 @@ export const productsInitialData: Prisma.ProductCreateInput[] = [
       create: [
         {
           url: 'https://res.cloudinary.com/dksluyb9v/image/upload/v1760821924/ecommerce/products/gyltscxkpnfufgowvitp.jpg',
-          publicId: 'gyltscxkpnfufgowvitp',
+          publicId: 'ecommerce/products/gyltscxkpnfufgowvitp',
         },
         {
           url: 'https://res.cloudinary.com/dksluyb9v/image/upload/v1760821924/ecommerce/products/nn1agtmktqeeksswrt2q.jpg',
-          publicId: 'nn1agtmktqeeksswrt2q',
+          publicId: 'ecommerce/products/nn1agtmktqeeksswrt2q',
         },
       ],
     },
@@ -744,6 +774,7 @@ export const productsInitialData: Prisma.ProductCreateInput[] = [
     type: Type.HOODIES,
     tags: ['hoodie'],
     gender: Gender.WOMEN,
+    status: ProductStatus.PUBLISHED,
   },
   {
     name: "Women's Turbine Cropped Long Sleeve Tee",
@@ -753,11 +784,11 @@ export const productsInitialData: Prisma.ProductCreateInput[] = [
       create: [
         {
           url: 'https://res.cloudinary.com/dksluyb9v/image/upload/v1760821924/ecommerce/products/uenvzsvslyh6zput1al1.jpg',
-          publicId: 'uenvzsvslyh6zput1al1',
+          publicId: 'ecommerce/products/uenvzsvslyh6zput1al1',
         },
         {
           url: 'https://res.cloudinary.com/dksluyb9v/image/upload/v1760821924/ecommerce/products/iglmfla08a4adgl2troa.jpg',
-          publicId: 'iglmfla08a4adgl2troa',
+          publicId: 'ecommerce/products/iglmfla08a4adgl2troa',
         },
       ],
     },
@@ -768,6 +799,7 @@ export const productsInitialData: Prisma.ProductCreateInput[] = [
     type: Type.SHIRTS,
     tags: ['shirt'],
     gender: Gender.WOMEN,
+    status: ProductStatus.PUBLISHED,
   },
   {
     name: "Women's Turbine Cropped Short Sleeve Tee",
@@ -777,11 +809,11 @@ export const productsInitialData: Prisma.ProductCreateInput[] = [
       create: [
         {
           url: 'https://res.cloudinary.com/dksluyb9v/image/upload/v1760821924/ecommerce/products/xk6fkv2sngq57qeurjtq.jpg',
-          publicId: 'xk6fkv2sngq57qeurjtq',
+          publicId: 'ecommerce/products/xk6fkv2sngq57qeurjtq',
         },
         {
           url: 'https://res.cloudinary.com/dksluyb9v/image/upload/v1760821924/ecommerce/products/mdmhkiq8umsjitedzdyq.jpg',
-          publicId: 'mdmhkiq8umsjitedzdyq',
+          publicId: 'ecommerce/products/mdmhkiq8umsjitedzdyq',
         },
       ],
     },
@@ -792,6 +824,7 @@ export const productsInitialData: Prisma.ProductCreateInput[] = [
     type: Type.SHIRTS,
     tags: ['shirt'],
     gender: Gender.WOMEN,
+    status: ProductStatus.PUBLISHED,
   },
   {
     name: "Women's T Logo Short Sleeve Scoop Neck Tee",
@@ -801,11 +834,11 @@ export const productsInitialData: Prisma.ProductCreateInput[] = [
       create: [
         {
           url: 'https://res.cloudinary.com/dksluyb9v/image/upload/v1760821924/ecommerce/products/h912rcukrejrf8c4tr5e.jpg',
-          publicId: 'h912rcukrejrf8c4tr5e',
+          publicId: 'ecommerce/products/h912rcukrejrf8c4tr5e',
         },
         {
           url: 'https://res.cloudinary.com/dksluyb9v/image/upload/v1760821924/ecommerce/products/vsgqdeoz8epxcf2ljgiz.jpg',
-          publicId: 'vsgqdeoz8epxcf2ljgiz',
+          publicId: 'ecommerce/products/vsgqdeoz8epxcf2ljgiz',
         },
       ],
     },
@@ -816,6 +849,7 @@ export const productsInitialData: Prisma.ProductCreateInput[] = [
     type: Type.SHIRTS,
     tags: ['shirt'],
     gender: Gender.WOMEN,
+    status: ProductStatus.PUBLISHED,
   },
   {
     name: "Women's T Logo Long Sleeve Scoop Neck Tee",
@@ -825,11 +859,11 @@ export const productsInitialData: Prisma.ProductCreateInput[] = [
       create: [
         {
           url: 'https://res.cloudinary.com/dksluyb9v/image/upload/v1760821924/ecommerce/products/uv81i1cgjkogzzdqmopa.jpg',
-          publicId: 'uv81i1cgjkogzzdqmopa',
+          publicId: 'ecommerce/products/uv81i1cgjkogzzdqmopa',
         },
         {
           url: 'https://res.cloudinary.com/dksluyb9v/image/upload/v1760821924/ecommerce/products/xszdxwh2ggggcwkczgg6.jpg',
-          publicId: 'xszdxwh2ggggcwkczgg6',
+          publicId: 'ecommerce/products/xszdxwh2ggggcwkczgg6',
         },
       ],
     },
@@ -840,6 +874,7 @@ export const productsInitialData: Prisma.ProductCreateInput[] = [
     type: Type.SHIRTS,
     tags: ['shirt'],
     gender: Gender.WOMEN,
+    status: ProductStatus.PUBLISHED,
   },
   {
     name: "Women's Small Wordmark Short Sleeve V-Neck Tee",
@@ -849,11 +884,11 @@ export const productsInitialData: Prisma.ProductCreateInput[] = [
       create: [
         {
           url: 'https://res.cloudinary.com/dksluyb9v/image/upload/v1760821924/ecommerce/products/x3cgvdtqht9xlh00pw9x.jpg',
-          publicId: 'x3cgvdtqht9xlh00pw9x',
+          publicId: 'ecommerce/products/x3cgvdtqht9xlh00pw9x',
         },
         {
           url: 'https://res.cloudinary.com/dksluyb9v/image/upload/v1760821924/ecommerce/products/a2z1infka9nz9ujqy42h.jpg',
-          publicId: 'a2z1infka9nz9ujqy42h',
+          publicId: 'ecommerce/products/a2z1infka9nz9ujqy42h',
         },
       ],
     },
@@ -864,6 +899,7 @@ export const productsInitialData: Prisma.ProductCreateInput[] = [
     type: Type.SHIRTS,
     tags: ['shirt'],
     gender: Gender.WOMEN,
+    status: ProductStatus.PUBLISHED,
   },
   {
     name: "Women's Large Wordmark Short Sleeve Crew Neck Tee",
@@ -873,11 +909,11 @@ export const productsInitialData: Prisma.ProductCreateInput[] = [
       create: [
         {
           url: 'https://res.cloudinary.com/dksluyb9v/image/upload/v1760821924/ecommerce/products/iftectnwkkccvx6oj3h2.jpg',
-          publicId: 'iftectnwkkccvx6oj3h2',
+          publicId: 'ecommerce/products/iftectnwkkccvx6oj3h2',
         },
         {
           url: 'https://res.cloudinary.com/dksluyb9v/image/upload/v1760821924/ecommerce/products/isfcih9jcdd4fh0wcym1.jpg',
-          publicId: 'isfcih9jcdd4fh0wcym1',
+          publicId: 'ecommerce/products/isfcih9jcdd4fh0wcym1',
         },
       ],
     },
@@ -888,6 +924,7 @@ export const productsInitialData: Prisma.ProductCreateInput[] = [
     type: Type.SHIRTS,
     tags: ['shirt'],
     gender: Gender.WOMEN,
+    status: ProductStatus.PUBLISHED,
   },
   {
     name: "Women's Plaid Mode Tee",
@@ -897,11 +934,11 @@ export const productsInitialData: Prisma.ProductCreateInput[] = [
       create: [
         {
           url: 'https://res.cloudinary.com/dksluyb9v/image/upload/v1760821924/ecommerce/products/bg6xp5vkxwjgqquqapad.jpg',
-          publicId: 'bg6xp5vkxwjgqquqapad',
+          publicId: 'ecommerce/products/bg6xp5vkxwjgqquqapad',
         },
         {
           url: 'https://res.cloudinary.com/dksluyb9v/image/upload/v1760821924/ecommerce/products/rtilqsounmqzaxgqo3t9.jpg',
-          publicId: 'rtilqsounmqzaxgqo3t9',
+          publicId: 'ecommerce/products/rtilqsounmqzaxgqo3t9',
         },
       ],
     },
@@ -912,6 +949,7 @@ export const productsInitialData: Prisma.ProductCreateInput[] = [
     type: Type.SHIRTS,
     tags: ['shirt'],
     gender: Gender.WOMEN,
+    status: ProductStatus.PUBLISHED,
   },
   {
     name: "Women's Powerwall Tee",
@@ -921,11 +959,11 @@ export const productsInitialData: Prisma.ProductCreateInput[] = [
       create: [
         {
           url: 'https://res.cloudinary.com/dksluyb9v/image/upload/v1760821924/ecommerce/products/ndh9yh8zbwhajzmvv2so.jpg',
-          publicId: 'ndh9yh8zbwhajzmvv2so',
+          publicId: 'ecommerce/products/ndh9yh8zbwhajzmvv2so',
         },
         {
           url: 'https://res.cloudinary.com/dksluyb9v/image/upload/v1760821924/ecommerce/products/t9ehknmswn33gogqbl9d.jpg',
-          publicId: 't9ehknmswn33gogqbl9d',
+          publicId: 'ecommerce/products/t9ehknmswn33gogqbl9d',
         },
       ],
     },
@@ -936,6 +974,7 @@ export const productsInitialData: Prisma.ProductCreateInput[] = [
     type: Type.SHIRTS,
     tags: ['shirt'],
     gender: Gender.WOMEN,
+    status: ProductStatus.PUBLISHED,
   },
   {
     name: "Women's Corp Jacket",
@@ -945,11 +984,11 @@ export const productsInitialData: Prisma.ProductCreateInput[] = [
       create: [
         {
           url: 'https://res.cloudinary.com/dksluyb9v/image/upload/v1760821924/ecommerce/products/tkjphglbok6ynfwyo4ym.jpg',
-          publicId: 'tkjphglbok6ynfwyo4ym',
+          publicId: 'ecommerce/products/tkjphglbok6ynfwyo4ym',
         },
         {
           url: 'https://res.cloudinary.com/dksluyb9v/image/upload/v1760821924/ecommerce/products/yytegy5iab2ahtbfwrsy.jpg',
-          publicId: 'yytegy5iab2ahtbfwrsy',
+          publicId: 'ecommerce/products/yytegy5iab2ahtbfwrsy',
         },
       ],
     },
@@ -960,6 +999,7 @@ export const productsInitialData: Prisma.ProductCreateInput[] = [
     type: Type.SHIRTS,
     tags: ['shirt'],
     gender: Gender.WOMEN,
+    status: ProductStatus.PUBLISHED,
   },
   {
     name: "Women's Raven Joggers",
@@ -969,11 +1009,11 @@ export const productsInitialData: Prisma.ProductCreateInput[] = [
       create: [
         {
           url: 'https://res.cloudinary.com/dksluyb9v/image/upload/v1760821924/ecommerce/products/z4u3pinzgbmmqrmjwtil.jpg',
-          publicId: 'z4u3pinzgbmmqrmjwtil',
+          publicId: 'ecommerce/products/z4u3pinzgbmmqrmjwtil',
         },
         {
           url: 'https://res.cloudinary.com/dksluyb9v/image/upload/v1760821924/ecommerce/products/gi1nsepqp9pz6qy2jk4r.jpg',
-          publicId: 'gi1nsepqp9pz6qy2jk4r',
+          publicId: 'ecommerce/products/gi1nsepqp9pz6qy2jk4r',
         },
       ],
     },
@@ -984,6 +1024,7 @@ export const productsInitialData: Prisma.ProductCreateInput[] = [
     type: Type.SHIRTS,
     tags: ['shirt'],
     gender: Gender.WOMEN,
+    status: ProductStatus.PUBLISHED,
   },
   {
     name: 'Kids Cybertruck Long Sleeve Tee',
@@ -993,11 +1034,11 @@ export const productsInitialData: Prisma.ProductCreateInput[] = [
       create: [
         {
           url: 'https://res.cloudinary.com/dksluyb9v/image/upload/v1760821924/ecommerce/products/uih2nqskgmvf2essrgx5.jpg',
-          publicId: 'uih2nqskgmvf2essrgx5',
+          publicId: 'ecommerce/products/uih2nqskgmvf2essrgx5',
         },
         {
           url: 'https://res.cloudinary.com/dksluyb9v/image/upload/v1760821924/ecommerce/products/dqaogzjibh3puuhnaov5.jpg',
-          publicId: 'dqaogzjibh3puuhnaov5',
+          publicId: 'ecommerce/products/dqaogzjibh3puuhnaov5',
         },
       ],
     },
@@ -1008,6 +1049,7 @@ export const productsInitialData: Prisma.ProductCreateInput[] = [
     type: Type.SHIRTS,
     tags: ['shirt'],
     gender: Gender.KID,
+    status: ProductStatus.PUBLISHED,
   },
   {
     name: 'Kids Scribble T Logo Tee',
@@ -1017,11 +1059,11 @@ export const productsInitialData: Prisma.ProductCreateInput[] = [
       create: [
         {
           url: 'https://res.cloudinary.com/dksluyb9v/image/upload/v1760821924/ecommerce/products/tdflfa4jjkrpyth2b6of.jpg',
-          publicId: 'tdflfa4jjkrpyth2b6of',
+          publicId: 'ecommerce/products/tdflfa4jjkrpyth2b6of',
         },
         {
           url: 'https://res.cloudinary.com/dksluyb9v/image/upload/v1760821924/ecommerce/products/wnkgp1fspnmotdl1f9qb.jpg',
-          publicId: 'wnkgp1fspnmotdl1f9qb',
+          publicId: 'ecommerce/products/wnkgp1fspnmotdl1f9qb',
         },
       ],
     },
@@ -1032,6 +1074,7 @@ export const productsInitialData: Prisma.ProductCreateInput[] = [
     type: Type.SHIRTS,
     tags: ['shirt'],
     gender: Gender.KID,
+    status: ProductStatus.PUBLISHED,
   },
   {
     name: 'Kids Cybertruck Tee',
@@ -1041,11 +1084,11 @@ export const productsInitialData: Prisma.ProductCreateInput[] = [
       create: [
         {
           url: 'https://res.cloudinary.com/dksluyb9v/image/upload/v1760821924/ecommerce/products/o5jt1kij2wziqqyynmu7.jpg',
-          publicId: 'o5jt1kij2wziqqyynmu7',
+          publicId: 'ecommerce/products/o5jt1kij2wziqqyynmu7',
         },
         {
           url: 'https://res.cloudinary.com/dksluyb9v/image/upload/v1760821924/ecommerce/products/qmzeyjgch7yo2a9xzrco.jpg',
-          publicId: 'qmzeyjgch7yo2a9xzrco',
+          publicId: 'ecommerce/products/qmzeyjgch7yo2a9xzrco',
         },
       ],
     },
@@ -1056,6 +1099,7 @@ export const productsInitialData: Prisma.ProductCreateInput[] = [
     type: Type.SHIRTS,
     tags: ['shirt'],
     gender: Gender.KID,
+    status: ProductStatus.PUBLISHED,
   },
   {
     name: 'Kids Racing Stripe Tee',
@@ -1065,11 +1109,11 @@ export const productsInitialData: Prisma.ProductCreateInput[] = [
       create: [
         {
           url: 'https://res.cloudinary.com/dksluyb9v/image/upload/v1760821924/ecommerce/products/s3nm5saoxwdpaekyr7ek.jpg',
-          publicId: 's3nm5saoxwdpaekyr7ek',
+          publicId: 'ecommerce/products/s3nm5saoxwdpaekyr7ek',
         },
         {
           url: 'https://res.cloudinary.com/dksluyb9v/image/upload/v1760821924/ecommerce/products/luje1k8ygfydqkfgm7fk.jpg',
-          publicId: 'luje1k8ygfydqkfgm7fk',
+          publicId: 'ecommerce/products/luje1k8ygfydqkfgm7fk',
         },
       ],
     },
@@ -1080,6 +1124,7 @@ export const productsInitialData: Prisma.ProductCreateInput[] = [
     type: Type.SHIRTS,
     tags: ['shirt'],
     gender: Gender.KID,
+    status: ProductStatus.PUBLISHED,
   },
   {
     name: 'Kids 3D T Logo Tee',
@@ -1089,11 +1134,11 @@ export const productsInitialData: Prisma.ProductCreateInput[] = [
       create: [
         {
           url: 'https://res.cloudinary.com/dksluyb9v/image/upload/v1760821924/ecommerce/products/rapn0tpv33kyhkp1nbuu.jpg',
-          publicId: 'rapn0tpv33kyhkp1nbuu',
+          publicId: 'ecommerce/products/rapn0tpv33kyhkp1nbuu',
         },
         {
           url: 'https://res.cloudinary.com/dksluyb9v/image/upload/v1760821924/ecommerce/products/tqkfl7tawdk7xxtnqxbr.jpg',
-          publicId: 'tqkfl7tawdk7xxtnqxbr',
+          publicId: 'ecommerce/products/tqkfl7tawdk7xxtnqxbr',
         },
       ],
     },
@@ -1104,6 +1149,7 @@ export const productsInitialData: Prisma.ProductCreateInput[] = [
     type: Type.SHIRTS,
     tags: ['shirt'],
     gender: Gender.KID,
+    status: ProductStatus.PUBLISHED,
   },
   {
     name: 'Kids Checkered Tee',
@@ -1113,11 +1159,11 @@ export const productsInitialData: Prisma.ProductCreateInput[] = [
       create: [
         {
           url: 'https://res.cloudinary.com/dksluyb9v/image/upload/v1760821924/ecommerce/products/orstfpjo1ucjhahpqqlx.jpg',
-          publicId: 'orstfpjo1ucjhahpqqlx',
+          publicId: 'ecommerce/products/orstfpjo1ucjhahpqqlx',
         },
         {
           url: 'https://res.cloudinary.com/dksluyb9v/image/upload/v1760821924/ecommerce/products/zhzu86uicqefwdb5uxco.jpg',
-          publicId: 'zhzu86uicqefwdb5uxco',
+          publicId: 'ecommerce/products/zhzu86uicqefwdb5uxco',
         },
       ],
     },
@@ -1128,6 +1174,7 @@ export const productsInitialData: Prisma.ProductCreateInput[] = [
     type: Type.SHIRTS,
     tags: ['shirt'],
     gender: Gender.KID,
+    status: ProductStatus.PUBLISHED,
   },
   {
     name: 'Made on Earth by Humans Onesie',
@@ -1137,11 +1184,11 @@ export const productsInitialData: Prisma.ProductCreateInput[] = [
       create: [
         {
           url: 'https://res.cloudinary.com/dksluyb9v/image/upload/v1760821924/ecommerce/products/bfbpinshm5fyp5hzhtf7.jpg',
-          publicId: 'bfbpinshm5fyp5hzhtf7',
+          publicId: 'ecommerce/products/bfbpinshm5fyp5hzhtf7',
         },
         {
           url: 'https://res.cloudinary.com/dksluyb9v/image/upload/v1760821924/ecommerce/products/v4p2ededuzd8ew96f6so.jpg',
-          publicId: 'v4p2ededuzd8ew96f6so',
+          publicId: 'ecommerce/products/v4p2ededuzd8ew96f6so',
         },
       ],
     },
@@ -1152,6 +1199,7 @@ export const productsInitialData: Prisma.ProductCreateInput[] = [
     type: Type.SHIRTS,
     tags: ['shirt'],
     gender: Gender.KID,
+    status: ProductStatus.PUBLISHED,
   },
   {
     name: 'Scribble T Logo Onesie',
@@ -1161,11 +1209,11 @@ export const productsInitialData: Prisma.ProductCreateInput[] = [
       create: [
         {
           url: 'https://res.cloudinary.com/dksluyb9v/image/upload/v1760821924/ecommerce/products/hreel3iswmtkvua2gv7v.jpg',
-          publicId: 'hreel3iswmtkvua2gv7v',
+          publicId: 'ecommerce/products/hreel3iswmtkvua2gv7v',
         },
         {
           url: 'https://res.cloudinary.com/dksluyb9v/image/upload/v1760821924/ecommerce/products/zpzcycnfekxdnej6uw2s.jpg',
-          publicId: 'zpzcycnfekxdnej6uw2s',
+          publicId: 'ecommerce/products/zpzcycnfekxdnej6uw2s',
         },
       ],
     },
@@ -1176,6 +1224,7 @@ export const productsInitialData: Prisma.ProductCreateInput[] = [
     type: Type.SHIRTS,
     tags: ['shirt'],
     gender: Gender.KID,
+    status: ProductStatus.PUBLISHED,
   },
   {
     name: 'Zero Emissions (Almost) Onesie',
@@ -1185,11 +1234,11 @@ export const productsInitialData: Prisma.ProductCreateInput[] = [
       create: [
         {
           url: 'https://res.cloudinary.com/dksluyb9v/image/upload/v1760821924/ecommerce/products/jubtrhpjdjtqifqrfeuf.jpg',
-          publicId: 'jubtrhpjdjtqifqrfeuf',
+          publicId: 'ecommerce/products/jubtrhpjdjtqifqrfeuf',
         },
         {
           url: 'https://res.cloudinary.com/dksluyb9v/image/upload/v1760821924/ecommerce/products/tpwkiy6wuqv8bzdqihgo.jpg',
-          publicId: 'tpwkiy6wuqv8bzdqihgo',
+          publicId: 'ecommerce/products/tpwkiy6wuqv8bzdqihgo',
         },
       ],
     },
@@ -1200,6 +1249,7 @@ export const productsInitialData: Prisma.ProductCreateInput[] = [
     type: Type.SHIRTS,
     tags: ['shirt'],
     gender: Gender.KID,
+    status: ProductStatus.PUBLISHED,
   },
   {
     name: 'Kids Cyberquad Bomber Jacket',
@@ -1209,11 +1259,11 @@ export const productsInitialData: Prisma.ProductCreateInput[] = [
       create: [
         {
           url: 'https://res.cloudinary.com/dksluyb9v/image/upload/v1760821924/ecommerce/products/tulwwvm8dvoswhvu39l8.jpg',
-          publicId: 'tulwwvm8dvoswhvu39l8',
+          publicId: 'ecommerce/products/tulwwvm8dvoswhvu39l8',
         },
         {
           url: 'https://res.cloudinary.com/dksluyb9v/image/upload/v1760821924/ecommerce/products/ezl7cgvslsg03mhdf1bt.jpg',
-          publicId: 'ezl7cgvslsg03mhdf1bt',
+          publicId: 'ecommerce/products/ezl7cgvslsg03mhdf1bt',
         },
       ],
     },
@@ -1224,6 +1274,7 @@ export const productsInitialData: Prisma.ProductCreateInput[] = [
     type: Type.SHIRTS,
     tags: ['shirt'],
     gender: Gender.KID,
+    status: ProductStatus.PUBLISHED,
   },
   {
     name: 'Kids Corp Jacket',
@@ -1233,11 +1284,11 @@ export const productsInitialData: Prisma.ProductCreateInput[] = [
       create: [
         {
           url: 'https://res.cloudinary.com/dksluyb9v/image/upload/v1760821924/ecommerce/products/crere1lkjuxjhgfgvdif.jpg',
-          publicId: 'crere1lkjuxjhgfgvdif',
+          publicId: 'ecommerce/products/crere1lkjuxjhgfgvdif',
         },
         {
           url: 'https://res.cloudinary.com/dksluyb9v/image/upload/v1760821924/ecommerce/products/isxtmwtwrkrxir5c39to.jpg',
-          publicId: 'isxtmwtwrkrxir5c39to',
+          publicId: 'ecommerce/products/isxtmwtwrkrxir5c39to',
         },
       ],
     },
@@ -1248,5 +1299,6 @@ export const productsInitialData: Prisma.ProductCreateInput[] = [
     type: Type.SHIRTS,
     tags: ['shirt'],
     gender: Gender.KID,
+    status: ProductStatus.PUBLISHED,
   },
-].map((p) => ({ ...p, status: ProductStatus.PUBLISHED }));
+];

@@ -17,9 +17,9 @@ import { UpdateProductDto } from './dto/update-product.dto';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { ResponseProductDto } from './dto/response-product.dto';
-import { PaginateProductDto } from './dto/paginate-product.dto';
 import { Payload } from 'src/common/types';
 import { Paginated } from '../common/interfaces/paginate.interface';
+import { FiltersProductDto } from './dto/filters-product.dto';
 
 @ApiTags('Products')
 @Controller('products')
@@ -57,9 +57,9 @@ export class ProductsController {
 
   @Get()
   findAll(
-    @Query() paginateProductDto: PaginateProductDto,
+    @Query() filtersProductDto: FiltersProductDto,
   ): Promise<Payload<Paginated<ResponseProductDto>>> {
-    return this.productsService.findAll(paginateProductDto);
+    return this.productsService.findAll(filtersProductDto);
   }
 
   @Get(':term')

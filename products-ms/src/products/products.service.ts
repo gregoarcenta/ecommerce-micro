@@ -5,11 +5,11 @@ import { PrismaService } from '../common/services/prisma.service';
 import { CloudinaryService } from '../common/services/cloudinary.service';
 import { UploadApiResponse } from 'cloudinary';
 import { ResponseProductDto } from './dto/response-product.dto';
-import { PaginateProductDto } from './dto/paginate-product.dto';
 import { Paginated } from '../common/interfaces/paginate.interface';
 import { productsInitialData } from './data/data';
 import { isUUID } from 'class-validator';
-import { Prisma, ProductStatus } from 'generated/prisma';
+import { Prisma } from 'generated/prisma';
+import { FiltersProductDto } from './dto/filters-product.dto';
 
 type Product = Prisma.ProductGetPayload<{ include: { images: true } }>;
 type UploadedImages = { url: string; publicId: string }[];
@@ -80,14 +80,44 @@ class ProductsService {
   }
 
   async findAll(
-    paginateProductDto: PaginateProductDto,
+    filtersProductDto: FiltersProductDto,
   ): Promise<Paginated<ResponseProductDto>> {
-    const { page, limit } = paginateProductDto;
+    const {
+      page,
+      limit,
+      status,
+      type,
+      gender,
+      size,
+      minPrice,
+      maxPrice,
+      orderBy,
+    } = filtersProductDto;
+
+    console.log(type, gender, size, minPrice, maxPrice, orderBy);
+
+    const where: Prisma.ProductWhereInput = {
+      status,
+      ...(type && type.length > 0 && { type: { in: type } }),
+      ...(gender && gender.length > 0 && { gender: { in: gender } }),
+      ...(size && size.length > 0 && { size: { hasSome: size } }),
+      ...(minPrice !== undefined || maxPrice !== undefined
+        ? {
+            price: {
+              ...(minPrice !== undefined && { gte: minPrice }),
+              ...(maxPrice !== undefined && { lte: maxPrice }),
+            },
+          }
+        : {}),
+    };
+
+    const orderByClause = this.buildOrderBy(orderBy);
 
     const productArgs: Prisma.ProductFindManyArgs = {
-      where: { status: ProductStatus.PUBLISHED },
+      where,
       skip: (page - 1) * limit,
       take: limit,
+      ...(orderByClause && { orderBy: orderByClause }),
     };
 
     try {
@@ -103,9 +133,9 @@ class ProductsService {
         data: products.map((p: Product) => this.buildProductResponse(p)),
         meta: {
           total: totalProducts,
-          page: paginateProductDto.page,
-          limit: paginateProductDto.limit,
-          lastPage: Math.ceil(totalProducts / paginateProductDto.limit),
+          page: page,
+          limit: limit,
+          lastPage: Math.ceil(totalProducts / limit),
         },
       };
     } catch (error) {
@@ -258,6 +288,23 @@ class ProductsService {
       this.logger.debug(
         `Successfully deleted ${successCount} images from Cloudinary`,
       );
+    }
+  }
+
+  private buildOrderBy(
+    orderBy?: string,
+  ): Prisma.ProductOrderByWithRelationInput | undefined {
+    if (!orderBy) return undefined;
+
+    switch (orderBy) {
+      case 'PRICE_ASC':
+        return { price: 'asc' };
+      case 'PRICE_DESC':
+        return { price: 'desc' };
+      case 'NEWEST':
+        return { createdAt: 'desc' };
+      default:
+        return undefined;
     }
   }
 
