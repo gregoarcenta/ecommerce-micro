@@ -20,6 +20,7 @@ import { ResponseProductDto } from './dto/response-product.dto';
 import { Payload } from 'src/common/types';
 import { Paginated } from '../common/interfaces/paginate.interface';
 import { FiltersProductDto } from './dto/filters-product.dto';
+import { SearchSuggestionsDto } from './dto/search-suggestions.dto';
 
 @ApiTags('Products')
 @Controller('products')
@@ -60,6 +61,13 @@ export class ProductsController {
     @Query() filtersProductDto: FiltersProductDto,
   ): Promise<Payload<Paginated<ResponseProductDto>>> {
     return this.productsService.findAll(filtersProductDto);
+  }
+
+  @Get('suggestions')
+  getSearchSuggestions(
+    @Query() searchSuggestionsDto: SearchSuggestionsDto,
+  ): Promise<Payload<Partial<ResponseProductDto>>> {
+    return this.productsService.getSearchSuggestions(searchSuggestionsDto);
   }
 
   @Get(':term')

@@ -8,8 +8,9 @@ import { ResponseProductDto } from './dto/response-product.dto';
 import { Paginated } from '../common/interfaces/paginate.interface';
 import { productsInitialData } from './data/data';
 import { isUUID } from 'class-validator';
-import { Prisma } from 'generated/prisma';
+import { Prisma, ProductStatus } from 'generated/prisma';
 import { FiltersProductDto } from './dto/filters-product.dto';
+import { SearchSuggestionsDto } from './dto/search-suggestions.dto';
 
 type Product = Prisma.ProductGetPayload<{ include: { images: true } }>;
 type UploadedImages = { url: string; publicId: string }[];
@@ -86,6 +87,7 @@ class ProductsService {
       page,
       limit,
       status,
+      search,
       type,
       gender,
       size,
@@ -94,10 +96,15 @@ class ProductsService {
       orderBy,
     } = filtersProductDto;
 
-    console.log(type, gender, size, minPrice, maxPrice, orderBy);
-
     const where: Prisma.ProductWhereInput = {
       status,
+      ...(search && {
+        OR: [
+          { name: { contains: search, mode: 'insensitive' } },
+          { description: { contains: search, mode: 'insensitive' } },
+          { slug: { contains: search, mode: 'insensitive' } },
+        ],
+      }),
       ...(type && type.length > 0 && { type: { in: type } }),
       ...(gender && gender.length > 0 && { gender: { in: gender } }),
       ...(size && size.length > 0 && { size: { hasSome: size } }),
@@ -121,13 +128,13 @@ class ProductsService {
     };
 
     try {
-      const totalProducts = await this.prisma.product.count({
-        where: productArgs.where,
-      });
-      const products: Product[] = await this.prisma.product.findMany({
-        ...productArgs,
-        include: { images: true },
-      });
+      const [totalProducts, products] = await Promise.all([
+        this.prisma.product.count({ where: productArgs.where }),
+        this.prisma.product.findMany({
+          ...productArgs,
+          include: { images: true },
+        }),
+      ]);
 
       return {
         data: products.map((p: Product) => this.buildProductResponse(p)),
@@ -138,6 +145,49 @@ class ProductsService {
           lastPage: Math.ceil(totalProducts / limit),
         },
       };
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async getSearchSuggestions(
+    searchSuggestionsDto: SearchSuggestionsDto,
+  ): Promise<Partial<ResponseProductDto>[]> {
+    const { query, limit } = searchSuggestionsDto;
+
+    try {
+      const products = await this.prisma.product.findMany({
+        where: {
+          status: ProductStatus.PUBLISHED,
+          OR: [
+            { name: { contains: query, mode: 'insensitive' } },
+            { description: { contains: query, mode: 'insensitive' } },
+            { slug: { contains: query, mode: 'insensitive' } },
+          ],
+        },
+        select: {
+          id: true,
+          name: true,
+          slug: true,
+          price: true,
+          images: {
+            take: 1,
+            select: {
+              url: true,
+            },
+          },
+        },
+        take: limit,
+        orderBy: [{ createdAt: 'desc' }],
+      });
+
+      return products.map((product) => ({
+        id: product.id,
+        name: product.name,
+        slug: product.slug,
+        price: product.price.toFixed(2),
+        image: product.images[0]?.url || null,
+      }));
     } catch (error) {
       throw error;
     }

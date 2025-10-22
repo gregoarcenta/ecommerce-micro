@@ -7,6 +7,7 @@ import {
   IsEnum,
   IsNumber,
   IsOptional,
+  IsString,
   Min,
 } from 'class-validator';
 import { Gender, ProductStatus, Size, Type } from 'generated/prisma';
@@ -28,6 +29,15 @@ export class FiltersProductDto extends PaginateProductDto {
   @IsOptional()
   @IsEnum(ProductStatus)
   status: ProductStatus = ProductStatus.PUBLISHED;
+
+  @ApiPropertyOptional({
+    description: 'Filter by product name',
+    example: 'T-shirt',
+  })
+  @IsOptional()
+  @IsString()
+  @Transform(({ value }) => (typeof value === 'string' ? value.trim() : value))
+  search?: string;
 
   @ApiPropertyOptional({
     description: 'Filter by product type',
