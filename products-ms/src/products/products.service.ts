@@ -51,12 +51,6 @@ class ProductsService {
   ): Promise<ResponseProductDto> {
     const uploadedImages = await this.insertImagesToCloudinary(files);
 
-    if (uploadedImages.length < files.length) {
-      this.logger.warn(
-        `Only ${uploadedImages.length}/${files.length} images were uploaded successfully`,
-      );
-    }
-
     try {
       const productCreated: Product = await this.prisma.product.create({
         data: {
@@ -124,8 +118,6 @@ class ProductsService {
       ? { id: term }
       : { slug: term };
 
-    where.status = ProductStatus.PUBLISHED;
-
     try {
       const product: Product = await this.prisma.product.findUniqueOrThrow({
         where,
@@ -138,17 +130,68 @@ class ProductsService {
     }
   }
 
-  async update(id: string, updateProductDto: UpdateProductDto) {
+  async update(
+    id: string,
+    updateProductDto: UpdateProductDto,
+    files?: Express.Multer.File[],
+    imagesToDelete?: string[],
+  ): Promise<ResponseProductDto> {
+    let uploadedImages: UploadedImages = [];
+
     try {
-      //todo: update images
-      //todo: update slug if name changes
-      const product: Product = await this.prisma.product.update({
-        where: { id },
-        data: updateProductDto,
-        include: { images: true },
+      // Sí hay nuevas imágenes, subirlas a cloudinary
+      if (files && files.length > 0) {
+        uploadedImages = await this.insertImagesToCloudinary(files);
+      }
+
+      const product = await this.prisma.$transaction(async (tx) => {
+        // Si hay imagines a eliminar, eliminarlas de la BD
+        if (imagesToDelete && imagesToDelete.length > 0) {
+          await tx.productImage.deleteMany({
+            where: {
+              productId: id,
+              publicId: { in: imagesToDelete },
+            },
+          });
+        }
+
+        // Sí se subieron las nuevas imágenes a cloudinary, crearlas en la BD
+        if (uploadedImages.length > 0) {
+          await tx.productImage.createMany({
+            data: uploadedImages.map(({ url, publicId }) => ({
+              productId: id,
+              url,
+              publicId,
+            })),
+          });
+        }
+
+        // Actualizar el producto en la BD
+        return tx.product.update({
+          where: { id },
+          data: {
+            ...updateProductDto,
+            ...(updateProductDto.name && {
+              slug: this.toSlug(updateProductDto.name),
+            }),
+          },
+          include: { images: true },
+        });
       });
+
+      // Sí salió bien, eliminar de Cloudinary
+      if (imagesToDelete && imagesToDelete.length > 0) {
+        await this.removeImagesFromCloudinary(
+          imagesToDelete.map((i) => ({ publicId: i, url: '' })),
+        );
+      }
+
       return this.buildProductResponse(product);
     } catch (error) {
+      this.logger.error(
+        `Error updating product. Rolling back ${uploadedImages.length} uploaded images`,
+      );
+      await this.removeImagesFromCloudinary(uploadedImages);
       throw error;
     }
   }
@@ -167,7 +210,7 @@ class ProductsService {
   private async insertImagesToCloudinary(
     images: MulterFiles,
   ): Promise<UploadedImages> {
-    return (
+    const uploadedImages: UploadedImages = (
       await Promise.allSettled(
         images.map((image) => this.cloudinaryService.uploadImage(image)),
       )
@@ -180,12 +223,20 @@ class ProductsService {
         url: value.secure_url,
         publicId: value.public_id,
       }));
+
+    if (uploadedImages.length < images.length) {
+      this.logger.warn(
+        `Only ${uploadedImages.length}/${images.length} images were uploaded successfully`,
+      );
+    }
+
+    return uploadedImages;
   }
 
   private async removeImagesFromCloudinary(
     uploadedImages: UploadedImages,
   ): Promise<void> {
-    if (uploadedImages.length > 0) return;
+    if (uploadedImages.length === 0) return;
 
     const deletePromises = uploadedImages.map(({ publicId }) =>
       this.cloudinaryService.deleteImage(publicId),

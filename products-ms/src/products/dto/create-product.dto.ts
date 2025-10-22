@@ -78,7 +78,7 @@ export class CreateProductDto {
   })
   sizes: Size[];
 
-  @ApiPropertyOptional({ example: ['shirt'], description: 'Product tags' })
+  @ApiPropertyOptional({ description: 'Product tags', example: ['shirt'] })
   @IsOptional()
   @ArrayUnique()
   @ArrayNotEmpty()

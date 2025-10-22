@@ -7,4 +7,8 @@ export class PrismaService extends PrismaClient implements OnModuleInit {
     await this.$connect();
     console.log('Connected to Prisma');
   }
+
+  // extendedPrismaClient() {
+  //   return this.$extends(withAccelerate());
+  // }
 }

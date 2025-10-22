@@ -68,13 +68,18 @@ export class ProductsController {
   }
 
   @Patch(':id')
+  @UseInterceptors(FilesInterceptor('productImages'))
   async update(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() updateProductDto: UpdateProductDto,
+    @UploadedFiles() files: Array<Express.Multer.File>,
   ): Promise<Payload<ResponseProductDto>> {
+    const { imagesToDelete, ...data } = updateProductDto;
     const updatedProduct = await this.productsService.update(
       id,
-      updateProductDto,
+      data,
+      files,
+      imagesToDelete,
     );
 
     return {
