@@ -72,10 +72,7 @@ export class CreateProductDto {
   @ArrayUnique()
   @ArrayNotEmpty()
   @IsArray()
-  @Transform(({ value }) => {
-    if (value && typeof value === 'string') return JSON.parse(value);
-    return value;
-  })
+  @Transform(({ value }) => (Array.isArray(value) ? value : [value]))
   sizes: Size[];
 
   @ApiPropertyOptional({ description: 'Product tags', example: ['shirt'] })
@@ -84,9 +81,6 @@ export class CreateProductDto {
   @ArrayNotEmpty()
   @IsArray()
   @IsString({ each: true })
-  @Transform(({ value }) => {
-    if (value && typeof value === 'string') return JSON.parse(value);
-    return value;
-  })
+  @Transform(({ value }) => (Array.isArray(value) ? value : [value]))
   tags?: string[];
 }

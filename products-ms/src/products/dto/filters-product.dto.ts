@@ -1,6 +1,14 @@
 import { PaginateProductDto } from './paginate-product.dto';
 import { ApiPropertyOptional } from '@nestjs/swagger';
-import { ArrayNotEmpty, ArrayUnique, IsArray, IsEnum, IsNumber, IsOptional, Min, } from 'class-validator';
+import {
+  ArrayNotEmpty,
+  ArrayUnique,
+  IsArray,
+  IsEnum,
+  IsNumber,
+  IsOptional,
+  Min,
+} from 'class-validator';
 import { Gender, ProductStatus, Size, Type } from 'generated/prisma';
 import { Transform } from 'class-transformer';
 

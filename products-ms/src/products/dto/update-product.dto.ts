@@ -30,9 +30,6 @@ export class UpdateProductDto extends PartialType(CreateProductDto) {
   @ArrayNotEmpty()
   @IsArray()
   @IsString({ each: true })
-  @Transform(({ value }) => {
-    if (value && typeof value === 'string') return JSON.parse(value);
-    return value;
-  })
+  @Transform(({ value }) => (Array.isArray(value) ? value : [value]))
   imagesToDelete?: string[];
 }
