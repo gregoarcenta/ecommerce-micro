@@ -107,7 +107,7 @@ class ProductsService {
       }),
       ...(type && type.length > 0 && { type: { in: type } }),
       ...(gender && gender.length > 0 && { gender: { in: gender } }),
-      ...(size && size.length > 0 && { size: { hasSome: size } }),
+      ...(size && size.length > 0 && { sizes: { hasSome: size } }),
       ...(minPrice !== undefined || maxPrice !== undefined
         ? {
             price: {

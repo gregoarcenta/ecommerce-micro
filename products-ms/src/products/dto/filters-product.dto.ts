@@ -1,15 +1,6 @@
 import { PaginateProductDto } from './paginate-product.dto';
 import { ApiPropertyOptional } from '@nestjs/swagger';
-import {
-  ArrayNotEmpty,
-  ArrayUnique,
-  IsArray,
-  IsEnum,
-  IsNumber,
-  IsOptional,
-  IsString,
-  Min,
-} from 'class-validator';
+import { ArrayNotEmpty, ArrayUnique, IsArray, IsEnum, IsNumber, IsOptional, IsString, Min, } from 'class-validator';
 import { Gender, ProductStatus, Size, Type } from 'generated/prisma';
 import { Transform } from 'class-transformer';
 
@@ -32,7 +23,6 @@ export class FiltersProductDto extends PaginateProductDto {
 
   @ApiPropertyOptional({
     description: 'Filter by product name',
-    example: 'T-shirt',
   })
   @IsOptional()
   @IsString()
@@ -41,9 +31,9 @@ export class FiltersProductDto extends PaginateProductDto {
 
   @ApiPropertyOptional({
     description: 'Filter by product type',
-    example: Type.SHIRTS,
     enum: Type,
     isArray: true,
+    example: [Type.SHIRTS],
   })
   @IsOptional()
   @IsEnum(Type, { each: true })
@@ -55,7 +45,7 @@ export class FiltersProductDto extends PaginateProductDto {
 
   @ApiPropertyOptional({
     description: 'Filter by gender',
-    example: Gender.MEN,
+    example: [Gender.MEN],
     enum: Gender,
     isArray: true,
   })
@@ -69,9 +59,9 @@ export class FiltersProductDto extends PaginateProductDto {
 
   @ApiPropertyOptional({
     description: 'Filter by size',
-    example: 'XS',
     enum: Size,
     isArray: true,
+    example: [Size.XS, Size.S, Size.M, Size.L, Size.XL, Size.XXL],
   })
   @IsOptional()
   @IsEnum(Size, { each: true })
@@ -91,10 +81,7 @@ export class FiltersProductDto extends PaginateProductDto {
   @Transform(({ value }) => parseFloat(value))
   minPrice?: number;
 
-  @ApiPropertyOptional({
-    description: 'Maximum price',
-    example: 100.0,
-  })
+  @ApiPropertyOptional({ description: 'Maximum price' })
   @IsOptional()
   @Min(0)
   @IsNumber()
@@ -104,7 +91,7 @@ export class FiltersProductDto extends PaginateProductDto {
   @ApiPropertyOptional({
     description: 'Order results',
     enum: ProductOrderBy,
-    example: ProductOrderBy.PRICE_ASC,
+    example: ProductOrderBy.NEWEST,
   })
   @IsOptional()
   @IsEnum(ProductOrderBy)
