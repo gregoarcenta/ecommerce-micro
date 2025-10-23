@@ -67,6 +67,7 @@ export class CreateProductDto {
     description: 'Product sizes',
     example: [Size.XS, Size.S],
     enum: Size,
+    isArray: true,
   })
   @IsEnum(Size, { each: true })
   @ArrayUnique()
