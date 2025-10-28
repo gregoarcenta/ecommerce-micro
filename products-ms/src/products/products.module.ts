@@ -11,7 +11,7 @@ import { CloudinaryProvider } from '../config/cloudinary.config';
     ProductsService,
     PrismaService,
     CloudinaryService,
-    CloudinaryProvider.config(),
+    CloudinaryProvider.init(),
   ],
 })
 export class ProductsModule {}

@@ -4,20 +4,20 @@ import path from 'path';
 process.loadEnvFile(path.resolve(__dirname, '../../../.env'));
 
 interface EnvConfig {
+  NODE_ENV: string;
+  APP_NAME: string;
+  PORT: number;
   PRODUCTS_HOST: string;
   PRODUCTS_PORT: number;
-  CLOUDINARY_NAME: string;
-  CLOUDINARY_API_KEY: string;
-  CLOUDINARY_API_SECRET: string;
 }
 
 const envSchema = joi
   .object<EnvConfig, true>({
+    NODE_ENV: joi.string().valid('development', 'production').required(),
+    APP_NAME: joi.string().default('Example Initial App'),
+    PORT: joi.number().port().default(3000),
     PRODUCTS_HOST: joi.string().default('localhost'),
     PRODUCTS_PORT: joi.number().port().default(3001),
-    CLOUDINARY_NAME: joi.string().required(),
-    CLOUDINARY_API_KEY: joi.string().required(),
-    CLOUDINARY_API_SECRET: joi.string().required(),
   })
   .unknown(true);
 

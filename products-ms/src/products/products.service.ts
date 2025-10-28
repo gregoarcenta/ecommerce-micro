@@ -95,7 +95,6 @@ class ProductsService {
       maxPrice,
       orderBy,
     } = filtersProductDto;
-
     const where: Prisma.ProductWhereInput = {
       status,
       ...(search && {
