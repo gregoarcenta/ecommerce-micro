@@ -5,3 +5,12 @@ export class ResponseDto<T> {
   timestamp: string;
   path: string;
 }
+
+export class ErrorResponseDto {
+  statusCode: number;
+  message: string;
+  error: string;
+  timestamp: string;
+  path: string;
+  details?: any;
+}

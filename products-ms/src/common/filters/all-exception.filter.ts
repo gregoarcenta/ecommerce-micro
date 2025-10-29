@@ -3,35 +3,46 @@ import {
   BadRequestException,
   Catch,
   ConflictException,
-  ExceptionFilter,
   HttpException,
   HttpStatus,
   Logger,
   NotFoundException,
+  RpcExceptionFilter,
 } from '@nestjs/common';
-import { Request, Response } from 'express';
 import { Prisma } from 'generated/prisma';
 import { inspect } from 'node:util';
-import { ApiErrorResponse } from '../interfaces/api.response';
+import { Observable, throwError } from 'rxjs';
 
-type ErrorContext = Omit<ApiErrorResponse, 'timestamp' | 'path'>;
+export interface ErrorResponse {
+  statusCode: number;
+  message: string;
+  error: string;
+  details?: any;
+}
 
 @Catch()
-export class ApiExceptionFilter implements ExceptionFilter {
-  private readonly logger = new Logger(ApiExceptionFilter.name);
-  private readonly isDev = process.env.NODE_ENV === 'development';
+export class AllExceptionFilter implements RpcExceptionFilter {
+  private readonly logger = new Logger(AllExceptionFilter.name);
 
-  catch(exception: unknown, host: ArgumentsHost): void {
-    const ctx = host.switchToHttp();
-    const response = ctx.getResponse<Response>();
-    const request = ctx.getRequest<Request>();
+  catch(exception: unknown, host: ArgumentsHost): Observable<any> {
+    const { message, details, error, statusCode } =
+      this.buildErrorContext(exception);
 
-    const errorContext = this.buildErrorContext(exception);
-    this.logError(request, errorContext);
-    this.sendResponse(response, request, errorContext);
+    const errorMessage = Array.isArray(message) ? message.join('; ') : message;
+
+    this.logger.error(`[ERROR] ${statusCode} -> (${error}): ${errorMessage}`);
+
+    const errorResponse: ErrorResponse = {
+      statusCode,
+      error,
+      message: errorMessage,
+      details,
+    };
+
+    return throwError(() => errorResponse);
   }
 
-  private buildErrorContext(exception: unknown): ErrorContext {
+  private buildErrorContext(exception: unknown): ErrorResponse {
     if (exception instanceof Prisma.PrismaClientKnownRequestError) {
       return this.handlePrismaError(exception);
     }
@@ -51,7 +62,7 @@ export class ApiExceptionFilter implements ExceptionFilter {
 
   private handlePrismaError(
     exception: Prisma.PrismaClientKnownRequestError,
-  ): ErrorContext {
+  ): ErrorResponse {
     const { meta, code } = exception;
     this.logger.debug(`[ERROR] CODE: ${code} -> ${JSON.stringify(meta)}`);
 
@@ -133,64 +144,33 @@ export class ApiExceptionFilter implements ExceptionFilter {
           statusCode: HttpStatus.BAD_REQUEST,
           error: 'DatabaseError',
           message: cleanMessage,
-          details: this.isDev
-            ? { prismaCode: code, meta, stack: exception.stack }
-            : undefined,
+          details: { prismaCode: code, meta, stack: exception.stack },
         };
       }
     }
   }
 
-  private handleHttpException(exception: HttpException): ErrorContext {
+  private handleHttpException(exception: HttpException): ErrorResponse {
     const res = exception.getResponse();
     const responseObj =
       typeof res === 'string'
         ? { message: res, error: exception.name }
-        : (res as Partial<ApiErrorResponse>);
+        : (res as Partial<ErrorResponse>);
 
     return {
       statusCode: exception.getStatus(),
       error: responseObj.error ?? exception.name,
       message: responseObj.message ?? exception.message,
-      details: this.isDev ? exception.stack : undefined,
+      details: exception.stack,
     };
   }
 
-  private handleUnexpectedError(exception: Error): ErrorContext {
+  private handleUnexpectedError(exception: Error): ErrorResponse {
     return {
       statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
       error: exception.name || 'InternalServerError',
       message: exception.message || 'An unexpected error occurred',
-      details: this.isDev ? exception.stack : undefined,
+      details: exception.stack,
     };
-  }
-
-  private logError(request: Request, context: ErrorContext): void {
-    const message = Array.isArray(context.message)
-      ? context.message.join('; ')
-      : context.message;
-
-    this.logger.error(
-      `[${request.method}] ${request.url} -> ${context.statusCode} (${context.error}): ${message}`,
-    );
-  }
-
-  private sendResponse(
-    response: Response,
-    request: Request,
-    context: ErrorContext,
-  ): void {
-    const message = Array.isArray(context.message)
-      ? context.message.join('; ')
-      : context.message;
-
-    const errorResponse: ApiErrorResponse = {
-      ...context,
-      message,
-      path: request.url,
-      timestamp: new Date().toISOString(),
-    };
-
-    response.status(context.statusCode).json(errorResponse);
   }
 }

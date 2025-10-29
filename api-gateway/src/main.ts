@@ -3,7 +3,7 @@ import { AppModule } from './app.module';
 import { Logger, ValidationPipe } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { envConfig } from './config';
-import { ApiResponseInterceptor } from './common';
+import { ApiResponseInterceptor, RpcCustomFilter } from './common';
 
 async function bootstrap() {
   const logger = new Logger('API Gateway');
@@ -22,7 +22,7 @@ async function bootstrap() {
   app.useGlobalInterceptors(new ApiResponseInterceptor());
 
   // Global Filters
-  // app.useGlobalFilters(new ApiExceptionFilter());
+  app.useGlobalFilters(new RpcCustomFilter());
 
   // Validation
   app.useGlobalPipes(

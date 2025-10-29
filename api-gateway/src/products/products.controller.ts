@@ -5,15 +5,14 @@ import {
   Get,
   Inject,
   Param,
-  ParseUUIDPipe,
   Patch,
   Post,
+  Query,
   UploadedFiles,
   UseInterceptors,
 } from '@nestjs/common';
 import { PRODUCT_SERVICE } from '../config';
 import { ClientProxy } from '@nestjs/microservices';
-import { catchError, throwError } from 'rxjs';
 import {
   ApiConsumes,
   ApiExtraModels,
@@ -23,7 +22,6 @@ import {
 } from '@nestjs/swagger';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { CreateProductDto } from './dto/create-product.dto';
-import { UpdateProductDto } from './dto/update-product.dto';
 
 @Controller('products')
 export class ProductsController {
@@ -48,12 +46,7 @@ export class ProductsController {
   @ApiResponse({ status: 500, description: 'Internal server error.' })
   @Post('seed')
   seed() {
-    return this.productsClient.send({ cmd: 'seed' }, {}).pipe(
-      catchError((err) => {
-        console.error(err);
-        return throwError(() => new Error('Error fetching products'));
-      }),
-    );
+    return this.productsClient.send({ cmd: 'seed' }, {});
   }
 
   @ApiExtraModels(CreateProductDto)
@@ -91,20 +84,23 @@ export class ProductsController {
   // })
   @ApiResponse({ status: 400, description: 'Invalid input data.' })
   @ApiResponse({ status: 500, description: 'Internal server error.' })
-  @UseInterceptors(FilesInterceptor('productImages'))
+  @UseInterceptors(FilesInterceptor('productImages', 5))
   @Post()
   create(
-    @Body() createProductDto: CreateProductDto,
+    @Body() createProductDto: any,
     @UploadedFiles() files: Array<Express.Multer.File>,
   ) {
-    return this.productsClient
-      .send({ cmd: 'create' }, { createProductDto, files })
-      .pipe(
-        catchError((err) => {
-          console.error(err);
-          return throwError(() => new Error('Error fetching products'));
-        }),
-      );
+    const serializedFiles =
+      files?.map((file) => ({
+        buffer: file.buffer.toString('base64'),
+        originalname: file.originalname,
+        mimetype: file.mimetype,
+        size: file.size,
+      })) || [];
+    return this.productsClient.send(
+      { cmd: 'create' },
+      { createProductDto, files: serializedFiles },
+    );
   }
 
   @Get()
@@ -145,54 +141,45 @@ export class ProductsController {
     },
   })
   @ApiResponse({ status: 500, description: 'Internal server error.' })
-  findAll() {
-    return this.productsClient.send({ cmd: 'findAll' }, { limit: -1 }).pipe(
-      catchError((err) => {
-        console.error(err);
-        return throwError(() => new Error('Error fetching products'));
-      }),
-    );
+  findAll(@Query() filtersProductDto: any) {
+    return this.productsClient.send({ cmd: 'findAll' }, filtersProductDto);
   }
 
-  // @Get('suggestions')
-  // @ApiOperation({
-  //   summary: 'Get search suggestions',
-  //   description:
-  //     'Returns product suggestions based on a search query. Useful for autocomplete functionality. Minimum 2 characters required.',
-  // })
-  // @ApiResponse({
-  //   status: 200,
-  //   description: 'Suggestions retrieved successfully.',
-  //   schema: {
-  //     example: {
-  //       message: 'Suggestions retrieved successfully',
-  //       data: [
-  //         {
-  //           id: '123e4567-e89b-12d3-a456-426614174000',
-  //           name: 'Camisa Polo Azul',
-  //           slug: 'camisa-polo-azul',
-  //           price: 29.99,
-  //           image: 'https://example.com/image.jpg',
-  //         },
-  //       ],
-  //     },
-  //   },
-  // })
-  // @ApiResponse({
-  //   status: 400,
-  //   description: 'Query too short (minimum 2 characters).',
-  // })
-  // @ApiResponse({ status: 500, description: 'Internal server error.' })
-  // getSearchSuggestions(@Query() searchSuggestionsDto: SearchSuggestionsDto) {
-  //   return this.productsClient
-  //     .send({ cmd: 'suggestions' }, { searchSuggestionsDto })
-  //     .pipe(
-  //       catchError((err) => {
-  //         console.error(err);
-  //         return throwError(() => new Error('Error fetching products'));
-  //       }),
-  //     );
-  // }
+  @Get('suggestions')
+  @ApiOperation({
+    summary: 'Get search suggestions',
+    description:
+      'Returns product suggestions based on a search query. Useful for autocomplete functionality. Minimum 2 characters required.',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Suggestions retrieved successfully.',
+    schema: {
+      example: {
+        message: 'Suggestions retrieved successfully',
+        data: [
+          {
+            id: '123e4567-e89b-12d3-a456-426614174000',
+            name: 'Camisa Polo Azul',
+            slug: 'camisa-polo-azul',
+            price: 29.99,
+            image: 'https://example.com/image.jpg',
+          },
+        ],
+      },
+    },
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Query too short (minimum 2 characters).',
+  })
+  @ApiResponse({ status: 500, description: 'Internal server error.' })
+  getSearchSuggestions(@Query() searchSuggestionsDto: any) {
+    return this.productsClient.send(
+      { cmd: 'suggestions' },
+      searchSuggestionsDto,
+    );
+  }
 
   @Get(':term')
   @ApiOperation({
@@ -212,12 +199,7 @@ export class ProductsController {
   @ApiResponse({ status: 404, description: 'Product not found.' })
   @ApiResponse({ status: 500, description: 'Internal server error.' })
   findOne(@Param('term') term: string) {
-    return this.productsClient.send({ cmd: 'findOne' }, { term }).pipe(
-      catchError((err) => {
-        console.error(err);
-        return throwError(() => new Error('Error fetching products'));
-      }),
-    );
+    return this.productsClient.send({ cmd: 'findOne' }, term);
   }
 
   @Patch(':id')
@@ -246,18 +228,22 @@ export class ProductsController {
   @ApiResponse({ status: 500, description: 'Internal server error.' })
   @UseInterceptors(FilesInterceptor('productImages'))
   update(
-    @Param('id', ParseUUIDPipe) id: string,
-    @Body() updateProductDto: UpdateProductDto,
+    @Param('id') id: string,
+    @Body() updateProductDto: any,
     @UploadedFiles() files: Array<Express.Multer.File>,
   ) {
-    return this.productsClient
-      .send({ cmd: 'update' }, { id, updateProductDto, files })
-      .pipe(
-        catchError((err) => {
-          console.error(err);
-          return throwError(() => new Error('Error fetching products'));
-        }),
-      );
+    const serializedFiles =
+      files?.map((file) => ({
+        buffer: file.buffer.toString('base64'),
+        originalname: file.originalname,
+        mimetype: file.mimetype,
+        size: file.size,
+      })) || [];
+
+    return this.productsClient.send(
+      { cmd: 'update' },
+      { id, updateProductDto, files: serializedFiles },
+    );
   }
 
   @Delete(':id')
@@ -282,11 +268,6 @@ export class ProductsController {
   @ApiResponse({ status: 404, description: 'Product not found.' })
   @ApiResponse({ status: 500, description: 'Internal server error.' })
   remove(@Param('id') id: string) {
-    return this.productsClient.send({ cmd: 'remove' }, { id }).pipe(
-      catchError((err) => {
-        console.error(err);
-        return throwError(() => new Error('Error fetching products'));
-      }),
-    );
+    return this.productsClient.send({ cmd: 'remove' }, { id });
   }
 }

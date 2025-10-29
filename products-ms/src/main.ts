@@ -3,6 +3,7 @@ import { AppModule } from './app.module';
 import { Logger, ValidationPipe } from '@nestjs/common';
 import { envConfig } from './config/env.config';
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';
+import { AllExceptionFilter } from './common/filters/all-exception.filter';
 
 async function bootstrap() {
   const logger = new Logger('Products MS');
@@ -15,6 +16,8 @@ async function bootstrap() {
       options: { host, port },
     },
   );
+
+  app.useGlobalFilters(new AllExceptionFilter());
 
   // Validation
   app.useGlobalPipes(
