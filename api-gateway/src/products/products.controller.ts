@@ -13,15 +13,9 @@ import {
 } from '@nestjs/common';
 import { PRODUCT_SERVICE } from '../config';
 import { ClientProxy } from '@nestjs/microservices';
-import {
-  ApiConsumes,
-  ApiExtraModels,
-  ApiOperation,
-  ApiParam,
-  ApiResponse,
-} from '@nestjs/swagger';
 import { FilesInterceptor } from '@nestjs/platform-express';
-import { CreateProductDto } from './dto/create-product.dto';
+import { ProductsSwaggerConfig } from '../swagger/products.swagger';
+import { ApiDocs } from '../common';
 
 @Controller('products')
 export class ProductsController {
@@ -29,63 +23,15 @@ export class ProductsController {
     @Inject(PRODUCT_SERVICE) private readonly productsClient: ClientProxy,
   ) {}
 
-  @ApiOperation({
-    summary: 'Seed initial products',
-    description:
-      'Populates the database with initial product data for development and testing purposes.',
-  })
-  @ApiResponse({
-    status: 201,
-    description: 'Products seeded successfully.',
-    schema: {
-      example: {
-        message: 'Seeding completed successfully',
-      },
-    },
-  })
-  @ApiResponse({ status: 500, description: 'Internal server error.' })
   @Post('seed')
+  @ApiDocs(ProductsSwaggerConfig.seed)
   seed() {
     return this.productsClient.send({ cmd: 'seed' }, {});
   }
 
-  @ApiExtraModels(CreateProductDto)
-  @ApiOperation({
-    summary: 'Create a new product',
-    description:
-      'Creates a new product in the system with the provided information including name, description, price, inventory details, and optional product images.',
-  })
-  @ApiConsumes('multipart/form-data')
-  // @ApiBody({
-  //   description: 'Product data and images',
-  //   schema: {
-  //     allOf: [
-  //       { $ref: getSchemaPath(CreateProductDto) },
-  //       {
-  //         type: 'object',
-  //         properties: {
-  //           productImages: {
-  //             type: 'array',
-  //             items: {
-  //               type: 'string',
-  //               format: 'binary',
-  //             },
-  //             description: 'Product images (max 5)',
-  //           },
-  //         },
-  //       },
-  //     ],
-  //   },
-  // })
-  // @ApiResponse({
-  //   status: 201,
-  //   description: 'Product created successfully.',
-  //   type: ResponseProductDto,
-  // })
-  @ApiResponse({ status: 400, description: 'Invalid input data.' })
-  @ApiResponse({ status: 500, description: 'Internal server error.' })
-  @UseInterceptors(FilesInterceptor('productImages', 5))
   @Post()
+  @ApiDocs(ProductsSwaggerConfig.create)
+  @UseInterceptors(FilesInterceptor('productImages', 5))
   create(
     @Body() createProductDto: any,
     @UploadedFiles() files: Array<Express.Multer.File>,
@@ -104,76 +50,13 @@ export class ProductsController {
   }
 
   @Get()
-  @ApiOperation({
-    summary: 'Get all products with filters',
-    description:
-      'Retrieves a paginated list of products. Supports filtering by search term, type, gender, size, price range, and sorting options.',
-  })
-  @ApiResponse({
-    status: 200,
-    description: 'Products retrieved successfully.',
-    schema: {
-      example: {
-        message: 'Products retrieved successfully',
-        data: {
-          data: [
-            {
-              id: '123e4567-e89b-12d3-a456-426614174000',
-              name: 'Producto ejemplo',
-              slug: 'producto-ejemplo',
-              description: 'Descripción del producto',
-              price: 29.99,
-              stock: 100,
-              type: 'shirt',
-              gender: 'unisex',
-              size: ['S', 'M', 'L'],
-              images: ['url1', 'url2'],
-            },
-          ],
-          meta: {
-            total: 100,
-            page: 1,
-            limit: 10,
-            lastPage: 10,
-          },
-        },
-      },
-    },
-  })
-  @ApiResponse({ status: 500, description: 'Internal server error.' })
+  @ApiDocs(ProductsSwaggerConfig.findAll)
   findAll(@Query() filtersProductDto: any) {
     return this.productsClient.send({ cmd: 'findAll' }, filtersProductDto);
   }
 
   @Get('suggestions')
-  @ApiOperation({
-    summary: 'Get search suggestions',
-    description:
-      'Returns product suggestions based on a search query. Useful for autocomplete functionality. Minimum 2 characters required.',
-  })
-  @ApiResponse({
-    status: 200,
-    description: 'Suggestions retrieved successfully.',
-    schema: {
-      example: {
-        message: 'Suggestions retrieved successfully',
-        data: [
-          {
-            id: '123e4567-e89b-12d3-a456-426614174000',
-            name: 'Camisa Polo Azul',
-            slug: 'camisa-polo-azul',
-            price: 29.99,
-            image: 'https://example.com/image.jpg',
-          },
-        ],
-      },
-    },
-  })
-  @ApiResponse({
-    status: 400,
-    description: 'Query too short (minimum 2 characters).',
-  })
-  @ApiResponse({ status: 500, description: 'Internal server error.' })
+  @ApiDocs(ProductsSwaggerConfig.suggestions)
   getSearchSuggestions(@Query() searchSuggestionsDto: any) {
     return this.productsClient.send(
       { cmd: 'suggestions' },
@@ -182,51 +65,14 @@ export class ProductsController {
   }
 
   @Get(':term')
-  @ApiOperation({
-    summary: 'Get product by ID or slug',
-    description: 'Retrieves a single product by its UUID or slug identifier.',
-  })
-  @ApiParam({
-    name: 'term',
-    description: 'Product UUID or slug',
-    example: '123e4567-e89b-12d3-a456-426614174000',
-  })
-  // @ApiResponse({
-  //   status: 200,
-  //   description: 'Product retrieved successfully.',
-  //   type: ResponseProductDto,
-  // })
-  @ApiResponse({ status: 404, description: 'Product not found.' })
-  @ApiResponse({ status: 500, description: 'Internal server error.' })
+  @ApiDocs(ProductsSwaggerConfig.findOne)
   findOne(@Param('term') term: string) {
     return this.productsClient.send({ cmd: 'findOne' }, term);
   }
 
   @Patch(':id')
-  @ApiOperation({
-    summary: 'Update a product',
-    description:
-      'Updates an existing product. Allows updating product information, adding new images, and deleting existing images.',
-  })
-  @ApiConsumes('multipart/form-data')
-  @ApiParam({
-    name: 'id',
-    description: 'Product UUID',
-    example: '123e4567-e89b-12d3-a456-426614174000',
-  })
-  // @ApiBody({
-  //   description: 'Updated product data',
-  //   type: UpdateProductDto,
-  // })
-  // @ApiResponse({
-  //   status: 200,
-  //   description: 'Product updated successfully.',
-  //   type: ResponseProductDto,
-  // })
-  @ApiResponse({ status: 400, description: 'Invalid input data.' })
-  @ApiResponse({ status: 404, description: 'Product not found.' })
-  @ApiResponse({ status: 500, description: 'Internal server error.' })
-  @UseInterceptors(FilesInterceptor('productImages'))
+  @ApiDocs(ProductsSwaggerConfig.update)
+  @UseInterceptors(FilesInterceptor('productImages', 5))
   update(
     @Param('id') id: string,
     @Body() updateProductDto: any,
@@ -247,26 +93,7 @@ export class ProductsController {
   }
 
   @Delete(':id')
-  @ApiOperation({
-    summary: 'Delete a product',
-    description: 'Soft deletes a product by changing its status to INACTIVE.',
-  })
-  @ApiParam({
-    name: 'id',
-    description: 'Product UUID',
-    example: '123e4567-e89b-12d3-a456-426614174000',
-  })
-  @ApiResponse({
-    status: 200,
-    description: 'Product deleted successfully.',
-    schema: {
-      example: {
-        message: 'Product Camisa Polo deleted successfully.',
-      },
-    },
-  })
-  @ApiResponse({ status: 404, description: 'Product not found.' })
-  @ApiResponse({ status: 500, description: 'Internal server error.' })
+  @ApiDocs(ProductsSwaggerConfig.remove)
   remove(@Param('id') id: string) {
     return this.productsClient.send({ cmd: 'remove' }, { id });
   }
