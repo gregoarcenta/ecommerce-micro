@@ -11,6 +11,8 @@ interface EnvConfig {
   PRODUCTS_PORT: number;
   AUTH_HOST: string;
   AUTH_PORT: number;
+
+  JWT_SECRET: string;
 }
 
 const envSchema = joi
@@ -22,6 +24,7 @@ const envSchema = joi
     PRODUCTS_PORT: joi.number().port().default(3001),
     AUTH_HOST: joi.string().default('localhost'),
     AUTH_PORT: joi.number().port().default(3002),
+    JWT_SECRET: joi.string().required(),
   })
   .unknown(true);
 

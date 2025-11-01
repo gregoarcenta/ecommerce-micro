@@ -16,6 +16,7 @@ import { ClientProxy } from '@nestjs/microservices';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { ProductsSwaggerConfig } from '../swagger/products.swagger';
 import { ApiDocs } from '../common';
+import { Auth } from '../auth/decoratos/auth.decorator';
 
 @Controller('products')
 export class ProductsController {
@@ -56,6 +57,7 @@ export class ProductsController {
   }
 
   @Get('suggestions')
+  @Auth()
   @ApiDocs(ProductsSwaggerConfig.suggestions)
   getSearchSuggestions(@Query() searchSuggestionsDto: any) {
     return this.productsClient.send(

@@ -2,6 +2,8 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UsersService } from '../users/users.service';
 import { UserRole } from 'generated/prisma';
+import { RegisterDto } from './dto/register.dto';
+import { LoginDto } from './dto/login.dto';
 
 export interface JwtPayload {
   sub: string;
@@ -26,12 +28,8 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  async register(
-    email: string,
-    password: string,
-    name: string,
-  ): Promise<AuthResponse> {
-    const user = await this.usersService.create(email, password, name);
+  async register(registerDto: RegisterDto): Promise<AuthResponse> {
+    const user = await this.usersService.create(registerDto);
 
     const payload: JwtPayload = {
       sub: user.id,
@@ -50,7 +48,8 @@ export class AuthService {
     };
   }
 
-  async login(email: string, password: string): Promise<AuthResponse> {
+  async login(loginDto: LoginDto): Promise<AuthResponse> {
+    const { email, password } = loginDto;
     const user = await this.usersService.findByEmail(email);
 
     if (!user) {
@@ -87,25 +86,33 @@ export class AuthService {
     };
   }
 
-  async validateToken(
-    token: string,
-  ): Promise<{ id: string; email: string; role: UserRole }> {
-    try {
-      const payload = this.jwtService.verify<JwtPayload>(token);
+  async validateToken(token: string): Promise<AuthResponse> {
+    const payload = this.jwtService.verify<JwtPayload>(token);
 
-      const user = await this.usersService.findById(payload.sub);
+    const user = await this.usersService.findById(payload.sub);
 
-      if (!user || !user.isActive) {
-        throw new UnauthorizedException('Invalid token');
-      }
-
-      return {
-        id: user.id,
-        email: user.email,
-        role: user.role,
-      };
-    } catch (error) {
+    if (!user) {
       throw new UnauthorizedException('Invalid token');
     }
+
+    if (user.isActive === false) {
+      throw new UnauthorizedException('User is inactive');
+    }
+
+    const newPayload: JwtPayload = {
+      sub: user.id,
+      email: user.email,
+      role: user.role,
+    };
+
+    return {
+      access_token: this.jwtService.sign(newPayload),
+      user: {
+        id: user.id,
+        email: user.email,
+        name: user.name,
+        role: user.role,
+      },
+    };
   }
 }

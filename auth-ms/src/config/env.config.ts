@@ -6,12 +6,14 @@ process.loadEnvFile(path.resolve(__dirname, '../../../.env'));
 interface EnvConfig {
   AUTH_HOST: string;
   AUTH_PORT: number;
+  JWT_SECRET: string;
 }
 
 const envSchema = joi
   .object<EnvConfig, true>({
     AUTH_HOST: joi.string().default('localhost'),
     AUTH_PORT: joi.number().port().default(3002),
+    JWT_SECRET: joi.string().required(),
   })
   .unknown(true);
 
