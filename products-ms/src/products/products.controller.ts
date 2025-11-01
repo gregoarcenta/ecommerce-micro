@@ -2,12 +2,10 @@ import { Controller, ParseUUIDPipe } from '@nestjs/common';
 import ProductsService from './products.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
-import { ApiTags } from '@nestjs/swagger';
 import { FiltersProductDto } from './dto/filters-product.dto';
 import { SearchSuggestionsDto } from './dto/search-suggestions.dto';
 import { MessagePattern, Payload } from '@nestjs/microservices';
 
-@ApiTags('Products')
 @Controller('products')
 export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
