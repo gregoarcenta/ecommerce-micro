@@ -11,32 +11,33 @@ import {
 import { AUTH_SERVICE } from '../config';
 import { ClientProxy } from '@nestjs/microservices';
 import { Auth } from './decoratos/auth.decorator';
-import { GetUser } from './decoratos/get-user.decorator';
-
 import express from 'express';
+import { ApiDocs } from '../common';
+import { authSwaggerConfig } from '../swagger/auth.swagger';
 
 @Controller('auth')
 export class AuthController {
   constructor(@Inject(AUTH_SERVICE) private readonly authClient: ClientProxy) {}
 
   @Post('register')
-  signUp(@Body() registerDto: any) {
+  @ApiDocs(authSwaggerConfig.register)
+  register(@Body() registerDto: any) {
     return this.authClient.send('auth_register', registerDto);
   }
 
   @Post('login')
   @HttpCode(HttpStatus.OK)
-  signIn(@Body() loginDto: any) {
+  @ApiDocs(authSwaggerConfig.login)
+  login(@Body() loginDto: any) {
     return this.authClient.send('auth_login', loginDto);
   }
 
   @Get('check-status')
   @Auth()
-  checkStatus(@GetUser() user: any, @Request() req: express.Request) {
+  @ApiDocs(authSwaggerConfig.checkStatus)
+  checkStatus(@Request() req: express.Request) {
     const authHeader = req.headers.authorization;
     const token = authHeader?.replace('Bearer ', '');
-
-    console.log(token);
     return this.authClient.send('validate_token', { token });
   }
 }
